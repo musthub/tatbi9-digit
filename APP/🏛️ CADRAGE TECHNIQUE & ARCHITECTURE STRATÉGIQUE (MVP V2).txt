@@ -1,0 +1,137 @@
+
+🏛️ DOCUMENT OFFICIEL DE CADRAGE ET SPÉCIFICATIONS TECHNIQUES
+
+ PROJET : DiGiT — L'Espace Culturel Décentralisé des Pionniers
+
+DEVISE OFFICIELLE :
+
+« RÉSEAU UNIFIÉ DE CONFIANCE ET DE CONNAISSANCE »
+
+« SOUVERAINETÉ DISTRIBUÉE »
+
+
+ ÉCOSYSTÈME : Pi Network (Testnet Sandbox & Mainnet Production)
+ SÉCURITÉ : Architecture Zero-Trust & Netlify Functions v2 (2026)
+
+
+DiGiT est une plateforme culturelle, artistique et créative conçue spécifiquement pour l'écosystème Pi Network. Elle offre aux Pionniers un espace d'expression libre, de valorisation des créations et d'échanges décentralisés. Notre objectif est de proposer un environnement immersif, sécurisé et fluide, accessible directement depuis le Pi Browser.
+
+Le concept allie de manière novatrice l'univers de la blockchain et de la communauté Pi à une véritable dimension culturelle, d'échange et de création participative.
+
+
+L'Enracinement Écosystémique
+
+Une fusion technologique et philosophique avec l'architecture de Pi Network
+
+
+
+🏛️ CADRAGE TECHNIQUE & ARCHITECTURE STRATÉGIQUE (MVP V2)
+
+
+
+ 1. VISION & ENGAGEMENT ÉCOSYSTÉMIQUE
+
+ DiGiT est un espace culturel, artistique et décentralisé, conçu nativement par un Pionnier de la première heure pour les millions d'utilisateurs du réseau Pi Network. Il allie la technologie blockchain à une dimension culturelle, d'échange et de création participative.
+
+ L'application s'intègre de manière optimale dans le *Pi Browser, offrant un environnement fluide, hautement sécurisé et adapté aux zones à faible débit.
+
+ 2. LES QUATRE PILIERS SYSTÉMIQUES (STRUCTURE GLOBALE)
+
+* DiGiT-ID : Identité décentralisée liée au KYC de Pi Network pour assurer une sécurité et une confiance absolue.
+* DiGiT-Pay : Pont financier de confiance simplifiant les transferts en Pi, idéal pour les micro-transactions et pourboires culturels.
+* DiGiT-Use : Suite d'outils et de services connectés au quotidien pour intégrer le Web3 dans la vie réelle.
+* DiGiT-Hub : Réseau d'entraide locale, de partage et d'utilité économique de proximité entre Pionniers.
+
+
+ 3. ARBORESCENCE DES 5 ÉCRANS APPLICATIFS
+
+ ARBORESCENCE & STRUCTURE GLOBALE DES ÉCRANS (MVP V2)
+L'architecture est pensée pour offrir une expérience fluide, rapide (adaptée aux zones à faible débit) et multilingue (avec support complet du sens de lecture RTL pour l'arabe).
+
+📱 DiGiT — Structure Globale :
+ 
+ Notre structure logicielle est optimisée pour s'intégrer sans aucune friction dans le Pi Browser, répondant précisément aux besoins de millions de Pionniers en quête de solutions de confiance.
+
+ DETAILES DES 5 ÉCRANS PRINCIPAUX :
+
+
+ ├── 1. 🏠 Écran d'Accueil (Dashboard / Fil de Découverte)
+ ├── 2. 📚 Espace Culture & Création (Livres, Arts, Musique, Sport)
+ ├── 3. 🤖 Salon IA DiGiT (Assistant Gemini 2.5 & Moteur de Recommandation)
+ ├── 4. 🏛️ L'Agora & Le Labo Créatif (Événements, Votes & Défis)
+ └── 5. 👤 Profil Pionnier & Pi Wallet (Badges, Publications & Portefeuille)
+
+
+
+ 🏠 Écran 1 : Dashboard & Fil Dynamique
+
+* Bannière d'accueil :** Vision inspirante (« Unir l'Esprit Humain & l'IA — Bâtissons ensemble l'avenir de la culture décentralisée »).
+* Internationalisation Native (i18n) : Prise en charge multilingue (Français, Anglais, Espagnol, Chinois, Arabe avec support RTL).
+* Passerelles Rapides : Intégration du solde utilisateur (ex: 3.14 Pi) et raccourcis vers l'Arène de l'Esprit et les générateurs.
+
+ 📚 Écran 2 : Espace Culture & Création (Catégories)
+
+* Livres & Écrits :** Romans, Poésie, Essais, Théâtre (Lecture participative).
+* Arts Visuels :** Peinture, Photo, Art Digital, Sculpture (Galerie virtuelle).
+* Musique & Audio :** Compositions, Chansons, Instruments, Découvertes.
+* Sport & Bien-être :** Actualités sportives, conseils d'épanouissement et défis physiques.
+
+ 🤖 Écran 3 : Salon IA DiGiT & Studio de Création (Gemini 2.5)
+
+* Salons de Conversation : Joutes verbales et maïeutique avec notre IA érudite (Socrate, Hugo, DaVinci).
+* Option Magnifier & Traducteur : Sublimation des écrits poétiques (Haïku, Médiéval, Cyberpunk, Shakespearien).
+* Symphonie Gemini & Art IA : Generation visuelle (Imagen 4) et composition de partitions/paroles originales.
+* Synthèse Vocale (TTS) : Module audio natif pour l'écoute des œuvres.
+
+ 🏛️ Écran 4 : L'Agora & Le Labo Créatif (Gouvernance & Défis)
+
+* L'Arène de l'Esprit : Énigmes d'élite et défis littéraires/artistiques.
+* Vote Décentralisé & Calendrier : Système de participation communautaire aux concours et événements en direct.
+* Récompenses : Distribution de micro-pourboires (tips en Pi) pour les meilleures contributions.
+
+ 👤 Écran 5 : Profil Pionnier, Wallet & Gamification
+
+* Authentification Pi SDK Native : Connexion sécurisée sans mot de passe via le Pi Browser.
+* Portfolio & Pi Wallet : Historique des créations et gestion transparente des récompenses.
+* Badges de Prestige & Gamification
+* 📜 Poète : Débloqué après 10 poèmes ou écrits magnifiés avec l'IA.
+* 🎨 Designer : Attribué après 5 œuvres d'art certifiées via Imagen 4.
+* ⚡ Actif : Octroyé pour une participation régulière aux salons Socrate & Hugo.
+* 🤝 Mécène : Soutien direct aux autres pionniers via les micro-tips en Pi.
+
+
+PROFIL UTILISATEUR
+
+Pionnier_Etoile (Lv)
+
+ÉCRITS
+
+ŒUVRES
+
+NOTE CLUB
+
+Le profil compile en temps réel vos accomplissements culturels et votre influence artistique au sein du club. Le Pi Wallet gère de manière transparente les distributions de pourboires et récompenses.
+
+
+ 3. DOCUMENT DE CADRAGE TECHNIQUE & ENGAGEMENTS
+
+ Directives UI/UX Modernes : Interface fluide évitant les pop-ups natives bloquantes (alert(), prompt()), au profit de modales et notifications (toasts) sur mesure.
+*   **Micro-transactions & Soutien Culturel :** Intégration sécurisée du Pi Wallet pour l'envoi de micro-gratifications et pourboires fixes de 0.50 Pi directement entre Pionniers pour soutenir les créateurs.
+*   **Sécurité Zero-Trust & Confidentialité :** Aucune clé privée (Passphrase), mot de passe ou donnée KYC sensible n'est demandée, stockée ou manipulée.
+*   **Déploiement Continu (CI/CD) :** Migration de l'infrastructure vers GitHub pour alimenter automatiquement la fonction d'arrière-plan v2 de Netlify (`/.netlify/functions/gemini`) en contournant les restrictions de builds manuels.
+
+
+. PLAN D'ACTION LOGISTIQUE (MVP)
+  *Axe 1 : Spécifications claires (User Stories) :** Rédiger des fiches fonctionnelles simples pour chaque écran pour guider les futurs développeurs ou intervenants.
+  *Axe 2 : Noyau Fonctionnel Minimum (MVP) :** Concentrer l'activation immédiate sur le couplage (Authentification Pi + Module de publication + Clé d'IA).
+
+. * Interface UI/UX Modernisée :
+ Notifications personnalisées (toasts/modales) évitant les pop-ups natives bloquantes.
+ Sécurité Zero-Trust & Confidentialité : Aucune clé privée (Passphrase), mot de passe ou donnée KYC n'est stockée ni manipulée.
+Architecture Serverless (2026)
+ Fonctions d'arrière-plan Netlify v2 (`/.netlify/functions/gemini`) pour une exécution fluide et invisible des requêtes IA.
+
+
+ FIN DU DOCUMENT OFFICIEL - DiGiT  2026
+
+ ☕💻💙🚀

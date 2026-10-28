@@ -1,0 +1,25 @@
+# ==========================================
+# CONFIGURATION NETLIFY POUR DiGiT
+# ==========================================
+
+[build]
+  publish = "."               # Dossier racine du projet
+  functions = "netlify/functions" # Dossier pour les fonctions serverless
+
+# Redirection globale pour application Single Page / Pi Browser
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+# En-têtes de sécurité et compatibilité WebView Pi Browser
+[[headers]]
+  for = "/*"
+  [headers.values]
+    # Autorise l'application à être encapsulée dans le Pi Browser (.pi)
+    Content-Security-Policy = "frame-ancestors 'self' https://*.minepi.com https://minepi.com pix://*;"
+    Access-Control-Allow-Origin = "*"
+    Access-Control-Allow-Headers = "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+    Access-Control-Allow-Methods = "GET, POST, PUT, DELETE, OPTIONS"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"

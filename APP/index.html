@@ -1,0 +1,2388 @@
+<!DOCTYPE html>
+<html lang="fr" id="html-root" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DiGiT - Espace Culturel des Pionniers (Pi Edition & IA)</title>
+    <!-- EMPLACEMENT EXACT : CHARGEMENT DU SDK PI NETWORK -->
+    <script src="https://minepi.com"></script>
+    
+    
+    <!-- Tailwind CSS pour un style moderne, réactif et fluide -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Space Grotesk & Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome pour de magnifiques icônes vectorielles -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        pi: {
+                            violet: '#8A348E',     /* Vivid Violet officiel Pi */
+                            darkviolet: '#150824', /* Fond sombre profond */
+                            gigas: '#593B8B',      /* Violet intermédiaire */
+                            gold: '#fbb44a',       /* Or Casablanca officiel */
+                            goldlight: '#fcc875',  /* Or lumineux pour les surveillances */
+                            slate: '#1a0f2e'       /* Arrière-plan sombre de cartes */
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        space: ['Space Grotesk', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        /* Custom scrollbar pour l'esthétique générale de la liseuse */
+        ::-webkit-scrollbar {
+            width: 4px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #150824;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #8A348E;
+            border-radius: 4px;
+        }
+        
+        /* Ombres et lueurs néon immersives */
+        .pi-glow-violet {
+            box-shadow: 0 0 15px rgba(138, 52, 142, 0.35);
+        }
+        .pi-glow-gold {
+            box-shadow: 0 0 15px rgba(251, 180, 74, 0.4);
+        }
+        
+        /* Gradients sophistiqués d'arrière-plan */
+        .pi-gradient-bg {
+            background: radial-gradient(circle at top, #2e0e3a 0%, #150824 100%);
+        }
+        .card-pi-gradient {
+            background: linear-gradient(135deg, rgba(26, 15, 46, 0.85) 0%, rgba(15, 8, 36, 0.98) 100%);
+            border: 1px solid rgba(138, 52, 142, 0.25);
+        }
+        .card-pi-gradient:hover {
+            border-color: rgba(251, 180, 74, 0.45);
+            box-shadow: 0 4px 20px rgba(138, 52, 142, 0.15);
+        }
+        
+        /* Animations fluides pour l'interactivité */
+        @keyframes pulse-gold {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: .7; transform: scale(1.05); }
+        }
+        .pulse-gold-icon {
+            animation: pulse-gold 2s infinite ease-in-out;
+        }
+
+        /* Oscilloscope animation */
+        @keyframes soundWave {
+            0%, 100% { height: 4px; }
+            50% { height: 28px; }
+        }
+        .bar {
+            animation: soundWave 1.2s infinite ease-in-out;
+        }
+        .bar:nth-child(2) { animation-delay: 0.2s; }
+        .bar:nth-child(3) { animation-delay: 0.4s; }
+        .bar:nth-child(4) { animation-delay: 0.6s; }
+        .bar:nth-child(5) { animation-delay: 0.8s; }
+
+        /* Animation de flottement pour le logo de la couverture */
+        @keyframes logoFloat {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(3deg); }
+        }
+        .float-logo {
+            animation: logoFloat 4s infinite ease-in-out;
+        }
+    </style>
+</head>
+<body class="bg-[#0c0414] text-slate-100 font-sans min-h-screen flex items-center justify-center py-0 md:py-8">
+
+    <div class="w-full max-w-md h-screen md:h-[840px] md:rounded-[40px] md:border-[8px] md:border-purple-950/50 bg-[#150824] flex flex-col justify-between overflow-hidden relative shadow-2xl pi-gradient-bg">
+        
+        <!-- COUVERTURE D'ACCUEIL / SPLASH SCREEN DE L'APP -->
+        <div id="view-splash" class="absolute inset-0 z-50 bg-[#150824] pi-gradient-bg flex flex-col justify-between p-8 text-center transition-all duration-700 ease-in-out">
+            <div class="flex justify-center gap-1.5 pt-2">
+                <!-- Selecteur rapide de langue sur la couverture -->
+                <button onclick="changeLanguage('fr')" class="w-8 h-8 rounded-full bg-white/5 hover:bg-white/15 border border-purple-900 flex items-center justify-center text-[10px] font-bold text-slate-200 transition-all lang-indicator border-pi-gold text-pi-gold" id="splash-lang-fr">FR</button>
+                <button onclick="changeLanguage('en')" class="w-8 h-8 rounded-full bg-white/5 hover:bg-white/15 border border-purple-900 flex items-center justify-center text-[10px] font-bold text-slate-200 transition-all lang-indicator" id="splash-lang-en">EN</button>
+                <button onclick="changeLanguage('es')" class="w-8 h-8 rounded-full bg-white/5 hover:bg-white/15 border border-purple-900 flex items-center justify-center text-[10px] font-bold text-slate-200 transition-all lang-indicator" id="splash-lang-es">ES</button>
+                <button onclick="changeLanguage('zh')" class="w-8 h-8 rounded-full bg-white/5 hover:bg-white/15 border border-purple-900 flex items-center justify-center text-[10px] font-bold text-slate-200 transition-all lang-indicator" id="splash-lang-zh">ZH</button>
+                <button onclick="changeLanguage('ar')" class="w-8 h-8 rounded-full bg-white/5 hover:bg-white/15 border border-purple-900 flex items-center justify-center text-[10px] font-bold text-slate-200 transition-all lang-indicator" id="splash-lang-ar">AR</button>
+            </div>
+
+            <div class="my-auto space-y-8">
+                <!-- Logo Pi Artistique et Flottant -->
+                <div class="relative w-32 h-32 mx-auto float-logo">
+                    <div class="absolute inset-0 bg-pi-violet/20 rounded-full blur-xl animate-pulse"></div>
+                    <div class="w-32 h-32 rounded-full bg-gradient-to-tr from-pi-gigas to-pi-violet flex items-center justify-center border-4 border-pi-gold shadow-2xl relative z-10">
+                        <span class="text-pi-gold font-bold text-7xl font-space">π</span>
+                    </div>
+                </div>
+
+                <!-- Titres d'accueil -->
+                <div class="space-y-3">
+                    <h1 class="text-5xl font-black tracking-wider text-white font-space">
+                        Di<span class="text-pi-gold">G</span>i<span class="text-pi-gold">T</span>
+                    </h1>
+                    <div class="h-0.5 w-16 bg-pi-gold mx-auto rounded-full"></div>
+                    <p data-i18n="splash_subtitle" class="text-xs text-pi-gold/90 font-bold tracking-widest uppercase font-space">ESPACE CULTUREL DES PIONNIERS</p>
+                </div>
+
+                <!-- Citation inspirante ou description d'accueil -->
+                <p data-i18n="splash_desc" class="text-xs text-slate-300 italic px-4 leading-relaxed max-w-[280px] mx-auto">
+                    "Bâtir l'avenir de la culture avec l'intelligence humaine & artificielle au sein de la communauté Pi."
+                </p>
+            </div>
+
+            <!-- Bouton d'entrée majeur -->
+            <div class="pb-8">
+                <button onclick="enterApplication()" class="w-full bg-gradient-to-r from-pi-gold to-pi-goldlight text-purple-950 hover:scale-[1.03] active:scale-[0.98] font-black tracking-wider text-sm py-4 px-6 rounded-2xl shadow-lg transition-all flex items-center justify-center gap-2 pi-glow-gold">
+                    <span data-i18n="splash_btn_enter">ENTRER DANS L'ESPACE</span>
+                    <i id="splash-arrow" class="fa-solid fa-arrow-right-long text-base"></i>
+                </button>
+                <p class="text-[9px] text-slate-500 mt-3 uppercase tracking-widest font-bold">Pi Network Layer-2 Creative Platform</p>
+            </div>
+        </div>
+
+        <!-- HEADER PRINCIPAL -->
+        <header id="app-header" class="sticky top-0 bg-[#150824]/95 backdrop-blur-md border-b border-purple-950/40 p-5 flex justify-between items-center z-40 transition-opacity duration-500">
+            <div>
+                <h1 class="text-3xl font-black tracking-wider text-white font-space">
+                    Di<span class="text-pi-gold">G</span>i<span class="text-pi-gold">T</span>
+                </h1>
+                <p data-i18n="header_subtitle" class="text-[10px] text-pi-gold/80 font-semibold tracking-widest uppercase mt-0.5">Espace Culturel des Pionniers</p>
+            </div>
+            
+            <div class="flex items-center gap-2.5">
+                <!-- Notifications avec compteur réactif -->
+                <button onclick="toggleNotifications()" class="relative p-2 rounded-full hover:bg-white/5 transition-colors text-slate-400 hover:text-white">
+                    <i class="fa-solid fa-bell text-xl"></i>
+                    <span id="notif-badge" class="absolute top-1.5 right-1.5 bg-pi-gold w-2.5 h-2.5 rounded-full ring-2 ring-[#150824]"></span>
+                </button>
+                
+                <!-- Compteur de Balance Pi connectée -->
+                <div class="flex items-center gap-2 bg-purple-950/50 border border-pi-violet/30 px-3 py-1 rounded-full">
+                    <span id="header-balance" class="text-xs font-bold text-pi-gold font-space">3.14 Pi</span>
+                    <div class="w-7 h-7 rounded-full bg-pi-violet flex items-center justify-center font-bold text-xs text-pi-gold ring-1 ring-pi-gold/30">
+                        π
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- PANEL DE NOTIFICATIONS -->
+        <div id="notif-panel" class="hidden absolute top-20 left-4 right-4 bg-[#1a0f2e]/98 border border-pi-violet/50 rounded-2xl p-4 shadow-2xl z-50 animate-fade-in">
+            <div class="flex justify-between items-center border-b border-purple-900/30 pb-2 mb-3">
+                <h3 data-i18n="notif_title" class="font-bold text-pi-gold font-space text-sm">Notifications</h3>
+                <button onclick="clearNotifications()" data-i18n="notif_clear" class="text-[10px] text-slate-400 hover:text-pi-gold">Tout marquer comme lu</button>
+            </div>
+            <div class="space-y-3 max-h-48 overflow-y-auto">
+                <div class="flex items-start gap-3 p-2 bg-white/5 rounded-lg text-xs">
+                    <span class="text-pi-gold mt-1">✨</span>
+                    <p><span class="font-bold">@Pionnier_Alpha</span> <span data-i18n="notif_msg_1">a partagé une nouvelle œuvre sculptée assistée par IA.</span></p>
+                </div>
+                <div class="flex items-start gap-3 p-2 bg-white/5 rounded-lg text-xs">
+                    <span class="text-pi-gold mt-1">🎨</span>
+                    <p><span data-i18n="notif_msg_2">Votre création de collection a reçu un pourboire de</span> <strong>0.50 Pi</strong> !</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- CONTENU CENTRAL (SCROLLABLE AVEC VUES MULTIPLES) -->
+        <main class="flex-grow overflow-y-auto p-4 space-y-5 pb-24" id="main-scroller">
+            
+            <!-- Citation inspirante dynamique -->
+            <div class="text-center py-1">
+                <p data-i18n="main_quote" class="text-[11px] italic text-purple-300 font-space">"La culture ne s'hérite pas, elle se conquiert." – André Malraux</p>
+            </div>
+
+            <div id="view-dashboard" class="space-y-5">
+                
+                <!-- CARTE DE JEU DE CULTURE INTERACTIVE (QUIZ IA) -->
+                <div class="bg-gradient-to-r from-pi-gigas/50 to-pi-violet/40 border border-pi-gold/40 rounded-2xl p-4 shadow-lg flex justify-between items-center relative overflow-hidden">
+                    <div class="z-10 space-y-1 max-w-[70%]">
+                        <span data-i18n="badge_new_ia" class="bg-pi-gold/20 text-pi-gold text-[9px] font-extrabold uppercase px-2 py-0.5 rounded-full border border-pi-gold/30">Nouveauté IA</span>
+                        <h3 data-i18n="quiz_card_title" class="text-sm font-bold text-white font-space mt-1">Le Grand Quiz des Pionniers</h3>
+                        <p data-i18n="quiz_card_desc" class="text-[10px] text-slate-300">Testez vos connaissances et gagnez des jetons de création Pi !</p>
+                    </div>
+                    <button onclick="startDailyQuiz()" class="bg-pi-gold hover:bg-pi-goldlight text-purple-950 font-extrabold text-xs px-3.5 py-2 rounded-xl transition-all shadow-md z-10 flex items-center gap-1">
+                        <i class="fa-solid fa-graduation-cap"></i> <span data-i18n="btn_play">Jouer</span>
+                    </button>
+                    <!-- Background aura -->
+                    <div class="absolute -right-12 -bottom-12 w-28 h-28 bg-pi-gold/15 rounded-full blur-2xl"></div>
+                </div>
+
+                <!-- COIN APPEL VOCAL DIRECT (GEMINI LIVE COMPANION) -->
+                <div class="bg-gradient-to-r from-purple-900 to-[#1a0f2e] border border-pi-violet/50 rounded-2xl p-4 shadow-lg relative overflow-hidden">
+                    <div class="z-10 space-y-2 relative">
+                        <span data-i18n="badge_live_vocal" class="bg-purple-500/30 text-purple-200 text-[9px] font-extrabold uppercase px-2 py-0.5 rounded-full border border-purple-500/40">Salon Vocal IA Direct</span>
+                        <h3 data-i18n="vocal_card_title" class="text-sm font-bold text-white font-space">Discuter avec un Avatar Historique</h3>
+                        <p data-i18n="vocal_card_desc" class="text-[10px] text-slate-300">Entrez en communication vocale directe avec des esprits brillants du passé.</p>
+                        
+                        <div class="flex gap-2 pt-1">
+                            <select id="live-avatar" class="bg-[#12071f] text-xs text-pi-gold border border-purple-900 rounded-lg px-2.5 py-1.5 focus:outline-none flex-grow">
+                                <option value="Sartre">Jean-Paul Sartre (Philosophy)</option>
+                                <option value="Sand">George Sand (Literature)</option>
+                                <option value="Curie">Marie Curie (Science & Art)</option>
+                            </select>
+                            <button onclick="toggleVoiceCall()" id="btn-voice-call" class="bg-pi-violet hover:bg-purple-700 text-pi-gold font-bold text-xs px-4 py-1.5 rounded-lg flex items-center gap-1.5 transition-all">
+                                <i class="fa-solid fa-phone"></i> <span data-i18n="btn_call">Appeler</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 1. LIVRES & ÉCRITS -->
+                <div class="card-pi-gradient rounded-2xl p-5 shadow-lg transition-all group">
+                    <div class="flex justify-between items-start mb-3">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-xl bg-pi-violet/20 flex items-center justify-center text-pi-gold text-lg border border-pi-violet/40">
+                                <i class="fa-solid fa-book-open"></i>
+                            </div>
+                            <h2 data-i18n="cat_books_title" class="text-lg font-bold tracking-wide font-space group-hover:text-pi-gold transition-colors text-white">LIVRES - ÉCRITS</h2>
+                        </div>
+                        <button onclick="openDrawer('livres')" class="text-slate-500 hover:text-pi-gold transition-colors">
+                            <i id="nav-arrow-books" class="fa-solid fa-chevron-right text-base group-hover:translate-x-1 transition-transform"></i>
+                        </button>
+                    </div>
+                    <p data-i18n="quote_voltaire" class="text-[10px] text-purple-300 italic mb-4">"La parole passe, le style reste." – Voltaire</p>
+                    <div class="grid grid-cols-2 gap-2 text-xs">
+                        <button onclick="openDrawerContent('livres', 'Romans')" class="bg-purple-950/40 hover:bg-pi-violet/30 p-2.5 rounded-lg border border-pi-violet/20 text-slate-300 text-left flex items-center gap-1.5 transition-all">
+                            <span>📚</span> <span data-i18n="sub_romans">Romans</span>
+                        </button>
+                        <button onclick="openDrawerContent('livres', 'Poésie')" class="bg-purple-950/40 hover:bg-pi-violet/30 p-2.5 rounded-lg border border-pi-violet/20 text-slate-300 text-left flex items-center gap-1.5 transition-all">
+                            <span>✍️</span> <span data-i18n="sub_poetry">Poésie</span>
+                        </button>
+                        <button onclick="openDrawerContent('livres', 'Essais')" class="bg-purple-950/40 hover:bg-pi-violet/30 p-2.5 rounded-lg border border-pi-violet/20 text-slate-300 text-left flex items-center gap-1.5 transition-all">
+                            <span>🧠</span> <span data-i18n="sub_essays">Essais</span>
+                        </button>
+                        <button onclick="openDrawerContent('livres', 'Théâtre')" class="bg-purple-950/40 hover:bg-pi-violet/30 p-2.5 rounded-lg border border-pi-violet/20 text-slate-300 text-left flex items-center gap-1.5 transition-all">
+                            <span>🎭</span> <span data-i18n="sub_theater">Théâtre</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 2. ARTS VISUELS -->
+                <div class="card-pi-gradient rounded-2xl p-5 shadow-lg transition-all group">
+                    <div class="flex justify-between items-start mb-3">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-xl bg-pi-violet/20 flex items-center justify-center text-pi-gold text-lg border border-pi-violet/40">
+                                <i class="fa-solid fa-palette"></i>
+                            </div>
+                            <h2 data-i18n="cat_arts_title" class="text-lg font-bold tracking-wide font-space group-hover:text-pi-gold transition-colors text-white">ARTS VISUELS</h2>
+                        </div>
+                        <button onclick="openDrawer('arts')" class="text-slate-500 hover:text-pi-gold transition-colors">
+                            <i id="nav-arrow-arts" class="fa-solid fa-chevron-right text-base group-hover:translate-x-1 transition-transform"></i>
+                        </button>
+                    </div>
+                    <p data-i18n="quote_klee" class="text-[10px] text-purple-300 italic mb-4">"L'art rend visible." – Paul Klee</p>
+                    <div class="grid grid-cols-2 gap-2 text-xs">
+                        <button onclick="openDrawerContent('arts', 'Peinture')" class="bg-purple-950/40 hover:bg-pi-violet/30 p-2.5 rounded-lg border border-pi-violet/20 text-slate-300 text-left flex items-center gap-1.5 transition-all">
+                            <span>🎨</span> <span data-i18n="sub_peinture">Peinture</span>
+                        </button>
+                        <button onclick="openDrawerContent('arts', 'Photo')" class="bg-purple-950/40 hover:bg-pi-violet/30 p-2.5 rounded-lg border border-pi-violet/20 text-slate-300 text-left flex items-center gap-1.5 transition-all">
+                            <span>📸</span> <span data-i18n="sub_photo">Photo</span>
+                        </button>
+                        <button onclick="openDrawerContent('arts', 'Art Digital')" class="bg-purple-950/40 hover:bg-pi-violet/30 p-2.5 rounded-lg border border-pi-violet/20 text-slate-300 text-left flex items-center gap-1.5 transition-all">
+                            <span>💻</span> <span data-i18n="sub_digital">Art Digital</span>
+                        </button>
+                        <button onclick="openDrawerContent('arts', 'Sculpture')" class="bg-purple-950/40 hover:bg-pi-violet/30 p-2.5 rounded-lg border border-pi-violet/20 text-slate-300 text-left flex items-center gap-1.5 transition-all">
+                            <span>🗿</span> <span data-i18n="sub_sculpture">Sculpture</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 3. MUSIQUE -->
+                <div class="card-pi-gradient rounded-2xl p-5 shadow-lg transition-all group">
+                    <div class="flex justify-between items-start mb-3">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-xl bg-pi-violet/20 flex items-center justify-center text-pi-gold text-lg border border-pi-violet/40">
+                                <i class="fa-solid fa-music"></i>
+                            </div>
+                            <h2 data-i18n="cat_music_title" class="text-lg font-bold tracking-wide font-space group-hover:text-pi-gold transition-colors text-white">MUSIQUE</h2>
+                        </div>
+                        <button onclick="openDrawer('musique')" class="text-slate-500 hover:text-pi-gold transition-colors">
+                            <i id="nav-arrow-music" class="fa-solid fa-chevron-right text-base group-hover:translate-x-1 transition-transform"></i>
+                        </button>
+                    </div>
+                    <p data-i18n="quote_cioran" class="text-[10px] text-purple-300 italic mb-4">"La musique est la langue des passions." – Cioran</p>
+                    <div class="grid grid-cols-2 gap-2 text-xs">
+                        <button onclick="openDrawerContent('musique', 'Compositions')" class="bg-purple-950/40 hover:bg-pi-violet/30 p-2.5 rounded-lg border border-pi-violet/20 text-slate-300 text-left flex items-center gap-1.5 transition-all">
+                            <span>🎼</span> <span data-i18n="sub_compositions">Compositions</span>
+                        </button>
+                        <button onclick="openDrawerContent('musique', 'Chansons')" class="bg-purple-950/40 hover:bg-pi-violet/30 p-2.5 rounded-lg border border-pi-violet/20 text-slate-300 text-left flex items-center gap-1.5 transition-all">
+                            <span>🎤</span> <span data-i18n="sub_chansons">Chansons</span>
+                        </button>
+                        <button onclick="openDrawerContent('musique', 'Instruments')" class="bg-purple-950/40 hover:bg-pi-violet/30 p-2.5 rounded-lg border border-pi-violet/20 text-slate-300 text-left flex items-center gap-1.5 transition-all">
+                            <span>🎸</span> <span data-i18n="sub_instruments">Instruments</span>
+                        </button>
+                        <button onclick="openDrawerContent('musique', 'Découvertes')" class="bg-purple-950/40 hover:bg-pi-violet/30 p-2.5 rounded-lg border border-pi-violet/20 text-slate-300 text-left flex items-center gap-1.5 transition-all">
+                            <span>🎧</span> <span data-i18n="sub_discoveries">Découvertes</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 4. SPORT -->
+                <div class="card-pi-gradient rounded-2xl p-5 shadow-lg transition-all group">
+                    <div class="flex justify-between items-start mb-3">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-xl bg-pi-violet/20 flex items-center justify-center text-pi-gold text-lg border border-pi-violet/40">
+                                <i class="fa-solid fa-dumbbell"></i>
+                            </div>
+                            <h2 data-i18n="cat_sport_title" class="text-lg font-bold tracking-wide font-space group-hover:text-pi-gold transition-colors text-white">SPORT</h2>
+                        </div>
+                        <button onclick="openDrawer('sport')" class="text-slate-500 hover:text-pi-gold transition-colors">
+                            <i id="nav-arrow-sport" class="fa-solid fa-chevron-right text-base group-hover:translate-x-1 transition-transform"></i>
+                        </button>
+                    </div>
+                    <p data-i18n="quote_juvenal" class="text-[10px] text-purple-300 italic mb-4">"Mens sana in corpore sano." – Juvénal</p>
+                    <div class="grid grid-cols-2 gap-2 text-xs">
+                        <button onclick="openDrawerContent('sport', 'Actualités')" class="bg-purple-950/40 hover:bg-pi-violet/30 p-2.5 rounded-lg border border-pi-violet/20 text-slate-300 text-left flex items-center gap-1.5 transition-all">
+                            <span>📰</span> <span data-i18n="sub_news">Actualités</span>
+                        </button>
+                        <button onclick="openDrawerContent('sport', 'Conseils')" class="bg-purple-950/40 hover:bg-pi-violet/30 p-2.5 rounded-lg border border-pi-violet/20 text-slate-300 text-left flex items-center gap-1.5 transition-all">
+                            <span>💪</span> <span data-i18n="sub_tips">Conseils</span>
+                        </button>
+                        <button onclick="openDrawerContent('sport', 'Compétitions')" class="bg-purple-950/40 hover:bg-pi-violet/30 p-2.5 rounded-lg border border-pi-violet/20 text-slate-300 text-left flex items-center gap-1.5 transition-all">
+                            <span>🏆</span> <span data-i18n="sub_competitions">Compétitions</span>
+                        </button>
+                        <button onclick="openDrawerContent('sport', 'Défis Club')" class="bg-purple-950/40 hover:bg-pi-violet/30 p-2.5 rounded-lg border border-pi-violet/20 text-slate-300 text-left flex items-center gap-1.5 transition-all">
+                            <span>🤝</span> <span data-i18n="sub_defis">Défis Club</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- VUE SALONS (DISCUSSION CHAT INTERACTIF CONNECTÉ À GEMINI) -->
+            <div id="view-salons" class="hidden flex flex-col h-[520px]">
+                <div class="flex gap-2 overflow-x-auto pb-2 mb-3">
+                    <button onclick="switchChatRoom('#generale')" id="tab-generale" class="px-3 py-1 bg-pi-violet/50 border border-pi-violet rounded-full text-xs font-bold text-white shrink-0 chat-tab active">💬 #culture-générale</button>
+                    <button onclick="switchChatRoom('#litterature')" id="tab-litterature" class="px-3 py-1 bg-purple-950/40 border border-purple-900/50 rounded-full text-xs text-slate-400 shrink-0 chat-tab">📚 #litterature</button>
+                    <button onclick="switchChatRoom('#creation')" id="tab-creation" class="px-3 py-1 bg-purple-950/40 border border-purple-900/50 rounded-full text-xs text-slate-400 shrink-0 chat-tab">🎨 #ateliers-creatifs</button>
+                </div>
+                
+                <!-- Zone de messages -->
+                <div id="chat-messages" class="flex-grow overflow-y-auto bg-purple-950/20 rounded-2xl border border-purple-900/40 p-3 space-y-3 mb-3 text-xs">
+                    <div class="text-center text-slate-500 text-[10px] py-1" data-i18n="chat_welcome">Début du canal interactif culturel</div>
+                    <div class="flex flex-col gap-1 items-start">
+                        <span class="text-[10px] text-pi-gold font-bold flex items-center gap-1">
+                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> @Pionnier_IA (Assistant)
+                        </span>
+                        <div class="bg-white/5 p-2.5 rounded-r-xl rounded-bl-xl max-w-[85%] text-slate-200" data-i18n="chat_intro_bot">
+                            Bonjour pionnier ! Je suis l'IA culturelle résidente de ce salon. Posez-moi vos questions de philosophie, demandez-moi un poème ou des conseils créatifs ! 🚀
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Loader d'écriture de l'IA -->
+                <div id="chat-loading" class="hidden text-left pl-3 pb-2 text-[10px] text-pi-gold/70 italic flex items-center gap-2">
+                    <i class="fa-solid fa-circle-notch animate-spin"></i> <span data-i18n="chat_thinking">L'IA Pionnière réfléchit à une réponse culturelle...</span>
+                </div>
+                
+                <!-- Input de message -->
+                <form onsubmit="sendChatMessage(event)" class="flex gap-2">
+                    <input type="text" id="chat-input" data-placeholder-i18n="chat_placeholder" placeholder="Rédiger votre message..." class="flex-grow bg-[#1a0f2e] border border-purple-900 focus:border-pi-gold focus:outline-none rounded-xl px-3 py-2.5 text-xs text-slate-100">
+                    <button type="submit" class="w-10 h-10 bg-pi-violet hover:bg-purple-700 text-pi-gold rounded-xl flex items-center justify-center transition-all hover:scale-105 active:scale-95">
+                        <i id="chat-send-icon" class="fa-solid fa-paper-plane"></i>
+                    </button>
+                </form>
+            </div>
+
+            <!-- VUE PI WALLET (SIMULATEUR DE COMPTE CRYPTO) -->
+            <div id="view-wallet" class="hidden space-y-5">
+                <!-- Carte du Wallet -->
+                <div class="bg-gradient-to-br from-pi-gigas to-pi-violet rounded-3xl p-5 border border-pi-gold/30 pi-glow-gold relative overflow-hidden">
+                    <div class="absolute -right-10 -bottom-10 w-40 h-40 bg-pi-gold/10 rounded-full blur-3xl"></div>
+                    <div class="flex justify-between items-center mb-6">
+                        <div class="flex items-center gap-2">
+                            <i class="fa-solid fa-wallet text-pi-gold text-lg"></i>
+                            <span class="text-[10px] font-bold text-white tracking-widest uppercase font-space">Pi Wallet • Pioneer Mainnet</span>
+                        </div>
+                        <span data-i18n="wallet_status" class="bg-emerald-500/20 text-emerald-400 text-[9px] px-2 py-0.5 rounded-full font-bold border border-emerald-500/30">Connecté</span>
+                    </div>
+                    <p data-i18n="wallet_available" class="text-[11px] text-purple-200 uppercase tracking-wider font-semibold">Solde disponible</p>
+                    <h3 id="wallet-pi-balance" class="text-4xl font-black text-white font-space mt-1 mb-6">3.14159 <span class="text-pi-gold">Pi</span></h3>
+                    
+                    <div class="flex gap-3">
+                        <button onclick="openTipDialog()" class="flex-grow bg-pi-gold hover:bg-pi-goldlight text-purple-950 font-bold text-xs py-2.5 px-4 rounded-xl flex items-center justify-center gap-2 transition-colors">
+                            <i class="fa-solid fa-heart"></i> <span data-i18n="wallet_btn_tip">Donner un pourboire</span>
+                        </button>
+                        <button onclick="simulateMining()" id="mine-btn" class="flex-grow bg-[#150824]/80 hover:bg-white/5 border border-pi-gold/40 text-pi-gold font-bold text-xs py-2.5 px-4 rounded-xl flex items-center justify-center gap-2 transition-colors">
+                            <i class="fa-solid fa-bolt"></i> <span data-i18n="wallet_btn_mine">Miner (24h)</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Activités et historique des transactions de culture -->
+                <div class="card-pi-gradient rounded-2xl p-4">
+                    <h3 class="text-sm font-bold text-pi-gold font-space mb-3 flex items-center gap-2">
+                        <i class="fa-solid fa-clock-rotate-left"></i> Transactions Artistiques
+                    </h3>
+                    <div class="space-y-3" id="wallet-history">
+                        <div class="flex justify-between items-center text-xs pb-2 border-b border-purple-950/30">
+                            <div>
+                                <p class="font-bold text-slate-200" data-i18n="wallet_hist_1">Achat Romans: Voltaire</p>
+                                <p class="text-[9px] text-slate-400">19 Mai 2026 • 15:42</p>
+                            </div>
+                            <span class="text-rose-400 font-semibold font-space">-0.10 Pi</span>
+                        </div>
+                        <div class="flex justify-between items-center text-xs pb-2 border-b border-purple-950/30">
+                            <div>
+                                <p class="font-bold text-slate-200" data-i18n="wallet_hist_2">Recompense Don Poème</p>
+                                <p class="text-[9px] text-slate-400">18 Mai 2026 • 10:15</p>
+                            </div>
+                            <span class="text-emerald-400 font-semibold font-space">+0.50 Pi</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- VUE PROFIL (INFORMATIONS ET BADGES PIONNIERS) -->
+            <div id="view-profile" class="hidden space-y-5 text-center">
+                <div class="relative w-24 h-24 mx-auto mb-2">
+                    <div class="w-full h-full rounded-full bg-slate-800 border-4 border-pi-gold flex items-center justify-center font-bold text-3xl text-pi-gold shadow-lg">
+                        P
+                    </div>
+                    <span class="absolute bottom-0 right-1 bg-pi-violet text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full border border-pi-gold">Lv 4</span>
+                </div>
+                <div>
+                    <h3 class="text-xl font-bold text-white font-space">Pionnier_Etoile</h3>
+                    <p data-i18n="profile_subtitle" class="text-xs text-pi-gold/80 font-semibold tracking-wider">Créateur de culture d'élite</p>
+                </div>
+
+                <!-- Statistiques d'engagement -->
+                <div class="grid grid-cols-3 gap-2 bg-purple-950/30 border border-purple-900/50 rounded-2xl p-4">
+                    <div>
+                        <p class="text-lg font-bold text-pi-gold font-space">12</p>
+                        <p data-i18n="profile_stat_writings" class="text-[9px] text-slate-400 uppercase">Écrits</p>
+                    </div>
+                    <div>
+                        <p class="text-lg font-bold text-pi-gold font-space">8</p>
+                        <p data-i18n="profile_stat_arts" class="text-[9px] text-slate-400 uppercase">Œuvres</p>
+                    </div>
+                    <div>
+                        <p class="text-lg font-bold text-pi-gold font-space">4.5★</p>
+                        <p data-i18n="profile_stat_rating" class="text-[9px] text-slate-400 uppercase">Note Club</p>
+                    </div>
+                </div>
+
+                <!-- Badges culturels de la blockchain -->
+                <div class="card-pi-gradient rounded-2xl p-4 text-left">
+                    <h3 data-i18n="profile_badges_title" class="text-xs font-bold text-pi-gold tracking-widest uppercase mb-3 font-space">Badges Pi Débloqués</h3>
+                    <div class="grid grid-cols-4 gap-2 text-center">
+                        <div class="bg-[#12071f] p-2 rounded-xl border border-pi-violet/30 flex flex-col items-center gap-1">
+                            <span class="text-xl">✍️</span>
+                            <span data-i18n="badge_poet" class="text-[8px] text-slate-300 font-bold">Poète</span>
+                        </div>
+                        <div class="bg-[#12071f] p-2 rounded-xl border border-pi-violet/30 flex flex-col items-center gap-1">
+                            <span class="text-xl">🎨</span>
+                            <span data-i18n="badge_designer" class="text-[8px] text-slate-300 font-bold">Designer</span>
+                        </div>
+                        <div class="bg-[#12071f] p-2 rounded-xl border border-pi-violet/30 flex flex-col items-center gap-1">
+                            <span class="text-xl">⚡</span>
+                            <span data-i18n="badge_active" class="text-[8px] text-slate-300 font-bold">Actif</span>
+                        </div>
+                        <div class="bg-[#12071f] p-2 rounded-xl border border-pi-gold/20 flex flex-col items-center gap-1">
+                            <span class="text-xl text-pi-gold">🪙</span>
+                            <span data-i18n="badge_sponsor" class="text-[8px] text-pi-gold font-bold">Mécène</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bouton pour retourner à l'écran de couverture (Déconnexion/Fermeture de session) -->
+                <div class="pt-4">
+                    <button onclick="exitToSplash()" class="bg-purple-950/60 hover:bg-purple-900 border border-purple-800 text-xs text-slate-400 hover:text-white px-4 py-2 rounded-xl transition-all">
+                        <i id="btn-logout-icon" class="fa-solid fa-right-from-bracket mr-2"></i> <span data-i18n="profile_exit_session">Retourner à l'accueil</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- VUE DE CRÉATION DE CONTENU (FORMULAIRE + & OUTILS IA DE POINTE) -->
+            <div id="view-create" class="hidden space-y-4">
+                
+                <!-- Navigation d'onglets de création -->
+                <div class="flex gap-1.5 border-b border-purple-900/40 pb-2 mb-2">
+                    <button onclick="switchCreateTab('text')" id="tab-create-text" class="flex-1 py-1.5 text-center text-[10px] font-bold rounded-lg bg-pi-violet/30 text-white border border-pi-violet/40 shrink-0">
+                        ✍️ <span data-i18n="tab_create_text">Texte & Écrit</span>
+                    </button>
+                    <button onclick="switchCreateTab('art')" id="tab-create-art" class="flex-1 py-1.5 text-center text-[10px] font-bold rounded-lg bg-purple-950/40 text-slate-400 shrink-0">
+                        🎨 <span data-i18n="tab_create_art">Art IA</span>
+                    </button>
+                    <button onclick="switchCreateTab('music')" id="tab-create-music" class="flex-1 py-1.5 text-center text-[10px] font-bold rounded-lg bg-purple-950/40 text-slate-400 shrink-0">
+                        ✨ <span data-i18n="tab_create_composer">Compositeur</span>
+                    </button>
+                </div>
+
+                <!-- Onglet 1 : Création Texte -->
+                <div id="create-text-panel" class="space-y-4">
+                    <form onsubmit="handleNewCreation(event)" class="space-y-4">
+                        <div>
+                            <label data-i18n="create_label_cat" class="block text-xs text-slate-400 mb-1">Catégorie d'art</label>
+                            <select id="create-category" class="w-full bg-[#1a0f2e] border border-purple-900 focus:border-pi-gold focus:outline-none rounded-xl p-3 text-xs text-slate-100">
+                                <option value="livres">📚 Écrits & Poésies</option>
+                                <option value="arts">🎨 Beaux Arts & Photographie</option>
+                                <option value="musique">🎸 Mélodies & Compositions</option>
+                                <option value="sport">💪 Exercices & Défis</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label data-i18n="create_label_title" class="block text-xs text-slate-400 mb-1">Titre de votre œuvre</label>
+                            <input type="text" id="create-title" required data-placeholder-i18n="create_placeholder_title" placeholder="Saisir le titre..." class="w-full bg-[#1a0f2e] border border-purple-900 focus:border-pi-gold focus:outline-none rounded-xl p-3 text-xs text-slate-100">
+                        </div>
+                        <div>
+                            <div class="flex justify-between items-center mb-1">
+                                <label data-i18n="create_label_body" class="block text-xs text-slate-400">Corps / Écrit</label>
+                                <!-- Bouton d'optimisation de texte littéraire avec styles -->
+                                <div class="flex gap-1.5 items-center">
+                                    <select id="sublimation-style" class="bg-[#1a0f2e] text-[9px] text-pi-gold border border-purple-900 rounded px-1.5 py-0.5 focus:outline-none">
+                                        <option value="classic">Classique</option>
+                                        <option value="cyberpunk">Cyberpunk</option>
+                                        <option value="romantic">Romantique</option>
+                                        <option value="melancholic">Mélancolique</option>
+                                    </select>
+                                    <button type="button" onclick="optimizeTextWithIA()" id="btn-optimize" class="bg-pi-violet/40 hover:bg-pi-violet border border-pi-violet text-pi-gold text-[10px] px-2 py-1 rounded-md flex items-center gap-1 transition-all">
+                                        <i class="fa-solid fa-wand-magic-sparkles text-xs"></i> <span data-i18n="text_magnifier_btn">Magnifier</span>
+                                    </button>
+                                </div>
+                            </div>
+                            <textarea id="create-body" required rows="4" data-placeholder-i18n="create_placeholder_body" placeholder="Tapez vos mots..." class="w-full bg-[#1a0f2e] border border-purple-900 focus:border-pi-gold focus:outline-none rounded-xl p-3 text-xs text-slate-100"></textarea>
+                        </div>
+                        <button type="submit" class="w-full bg-pi-gold hover:bg-pi-goldlight text-purple-950 font-bold text-xs py-3 px-4 rounded-xl shadow-lg flex items-center justify-center gap-2 transition-colors">
+                            <i class="fa-solid fa-square-plus"></i> <span data-i18n="create_btn_publish">Publier et certifier sur Pi Block</span>
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Onglet 2 : Générateur d'Art (Imagen 4 + Iterative Multi-turn Editing) -->
+                <div id="create-art-panel" class="hidden space-y-4">
+                    <div class="p-4 bg-purple-950/20 border border-purple-900/40 rounded-2xl">
+                        <h4 data-i18n="art_studio_title" class="text-xs font-bold text-pi-gold uppercase tracking-wider mb-2 font-space">
+                            🎨 Studio Créatif Imagen 4
+                        </h4>
+                        <p data-i18n="art_studio_desc" class="text-[10px] text-slate-400 mb-4">
+                            Générez des œuvres d'art numériques époustouflantes, puis utilisez l'Éditeur Multitours pour modifier dynamiquement les créations !
+                        </p>
+                        
+                        <div class="space-y-3">
+                            <textarea id="art-prompt" rows="3" data-placeholder-i18n="art_placeholder_prompt" placeholder="Ex: Une peinture néo-futuriste d'un astronaute..." class="w-full bg-[#1a0f2e] border border-purple-900 focus:border-pi-gold focus:outline-none rounded-xl p-3 text-xs text-slate-100"></textarea>
+                            
+                            <!-- Options de format d'image -->
+                            <div class="flex gap-2">
+                                <button onclick="selectAspectRatio('1:1')" id="ratio-1-1" class="flex-1 py-1.5 text-[10px] bg-pi-violet border border-pi-violet text-white rounded-lg" data-i18n="ratio_square">Format Carré (1:1)</button>
+                                <button onclick="selectAspectRatio('16:9')" id="ratio-16-9" class="flex-1 py-1.5 text-[10px] bg-purple-950/40 border border-purple-900 text-slate-400 rounded-lg" data-i18n="ratio_landscape">Paysage (16:9)</button>
+                            </div>
+
+                            <button onclick="generateImageWithIA()" id="btn-generate-image" class="w-full bg-pi-violet hover:bg-purple-700 text-pi-gold font-bold text-xs py-2.5 rounded-xl flex items-center justify-center gap-2 transition-all">
+                                <i class="fa-solid fa-palette pulse-gold-icon"></i> <span data-i18n="btn_generate_art">Générer l'œuvre d'art</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Aperçu de l'art généré de collection -->
+                    <div id="art-preview-container" class="hidden p-4 bg-purple-950/30 border border-pi-gold/20 rounded-2xl text-center space-y-3">
+                        <p class="text-[10px] text-pi-gold uppercase font-bold tracking-widest font-space">Aperçu du Chef-d'œuvre</p>
+                        <img id="generated-art-image" class="w-full rounded-xl object-contain border border-purple-900 max-h-48 mx-auto" src="" alt="Art Généré">
+                        
+                        <!-- INTERACTIVE MULTI-TURN ART EDITOR (Iterative modifications) -->
+                        <div class="p-3 bg-purple-950/50 rounded-xl border border-pi-violet/30 text-left space-y-2 mt-2">
+                            <span class="text-[9px] text-pi-gold font-bold uppercase tracking-wider"><i class="fa-solid fa-wand-magic-sparkles"></i> Retouches et Variations IA</span>
+                            <p class="text-[9px] text-slate-400">Soumettez des instructions d'édition d'image (ex: "Remplace le violon par un saxo", "Ajoute un chat noir").</p>
+                            <div class="flex gap-2">
+                                <input type="text" id="edit-art-instruction" placeholder="Modifications souhaitées..." class="flex-grow bg-[#1a0f2e] border border-purple-900 focus:border-pi-gold focus:outline-none rounded-lg px-2.5 py-1.5 text-xs text-slate-100">
+                                <button onclick="editGeneratedArt()" id="btn-edit-art" class="bg-pi-gold hover:bg-pi-goldlight text-purple-950 text-xs px-3 rounded-lg font-bold"><i class="fa-solid fa-rotate"></i> Modif</button>
+                            </div>
+                        </div>
+
+                        <div class="space-y-2">
+                            <input type="text" id="generated-art-title" placeholder="Donnez un titre de collection..." class="w-full bg-[#1a0f2e] border border-purple-900 focus:border-pi-gold focus:outline-none rounded-xl px-3 py-2 text-xs text-slate-100">
+                            
+                            <div class="flex gap-2 pt-1">
+                                <button onclick="critiqueGeneratedArt()" id="btn-critique" class="flex-1 bg-purple-900 hover:bg-purple-850 text-purple-200 border border-purple-700 font-bold text-[10px] py-2 px-3 rounded-xl flex items-center justify-center gap-1 transition-all">
+                                    <i class="fa-solid fa-brain"></i> Critique IA
+                                </button>
+                                <button onclick="mintGeneratedArt()" class="flex-1 bg-pi-gold hover:bg-pi-goldlight text-purple-950 font-bold text-[10px] py-2 px-3 rounded-xl flex items-center justify-center gap-1 transition-all">
+                                    <i class="fa-solid fa-cube"></i> Mint (0.50 Pi)
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Onglet 3 : Compositeur de Chanson (NOUVEAUTÉ LLM) -->
+                <div id="create-music-panel" class="hidden space-y-4">
+                    <div class="p-4 bg-purple-950/20 border border-purple-900/40 rounded-2xl space-y-3">
+                        <h4 data-i18n="music_composer_title" class="text-xs font-bold text-pi-gold uppercase tracking-wider font-space">
+                            🎸 Compositeur Virtuel de Chansons
+                        </h4>
+                        <p data-i18n="music_composer_desc" class="text-[10px] text-slate-300">
+                            Laissez Gemini composer un morceau de musique complet, incluant tempo, grille d'accords et paroles originales sur mesure.
+                        </p>
+                        
+                        <div>
+                            <label data-i18n="music_label_prompt" class="block text-[10px] text-slate-400 mb-1">Thématique ou Inspiration</label>
+                            <input type="text" id="music-prompt" data-placeholder-i18n="music_placeholder_prompt" placeholder="Ex: Voyage d'un astronaute solitaire..." class="w-full bg-[#1a0f2e] border border-purple-900 focus:border-pi-gold focus:outline-none rounded-xl p-2.5 text-xs text-slate-100">
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-2">
+                            <div>
+                                <label data-i18n="music_label_style" class="block text-[10px] text-slate-400 mb-1">Style Musical</label>
+                                <select id="music-genre" class="w-full bg-[#1a0f2e] border border-purple-900 focus:outline-none rounded-lg p-2 text-xs text-slate-100">
+                                    <option value="Cyber-Jazz">Cyber-Jazz</option>
+                                    <option value="Synthwave 80s">Synthwave 80s</option>
+                                    <option value="Folk Lunaire">Folk Lunaire</option>
+                                    <option value="Slam Philo">Slam Philosophique</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label data-i18n="music_label_key" class="block text-[10px] text-slate-400 mb-1">Tonalité souhaitée</label>
+                                <select id="music-key" class="w-full bg-[#1a0f2e] border border-purple-900 focus:outline-none rounded-lg p-2 text-xs text-slate-100">
+                                    <option value="Do Majeur">Do Majeur</option>
+                                    <option value="La Mineur">La Mineur</option>
+                                    <option value="Mi Mineur">Mi Mineur</option>
+                                    <option value="Ré Majeur">Ré Majeur</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <button onclick="composeMusicWithIA()" id="btn-compose-music" class="w-full bg-pi-gold hover:bg-pi-goldlight text-purple-950 font-bold text-xs py-2.5 rounded-xl flex items-center justify-center gap-2 transition-all">
+                            <i class="fa-solid fa-wand-magic-sparkles"></i> <span data-i18n="btn_compose_music">Composer la Chanson</span>
+                        </button>
+                    </div>
+
+                    <!-- Feuille de chanson générée -->
+                    <div id="music-composition-container" class="hidden p-4 bg-purple-950/30 border border-pi-gold/20 rounded-2xl space-y-3">
+                        <div class="flex justify-between items-center border-b border-purple-900/40 pb-2">
+                            <h5 id="music-result-title" class="text-sm font-bold text-white font-space">Titre de la composition</h5>
+                            <span id="music-result-meta" class="text-[9px] text-pi-gold font-bold">Style • Do Majeur</span>
+                        </div>
+                        
+                        <div id="music-result-sheet" class="text-xs text-slate-200 leading-relaxed font-mono whitespace-pre-wrap max-h-60 overflow-y-auto bg-[#12071f] p-3 rounded-xl border border-purple-900/50">
+                            <!-- Rempli par l'IA -->
+                        </div>
+
+                        <div class="flex gap-2">
+                            <button id="btn-music-tts" onclick="narrateSong()" class="flex-1 bg-purple-900 hover:bg-purple-850 text-purple-200 border border-purple-700 font-bold text-[10px] py-2 px-3 rounded-xl flex items-center justify-center gap-1 transition-all">
+                                <i class="fa-solid fa-volume-high"></i> <span data-i18n="btn_listen">Écouter</span>
+                            </button>
+                            <button onclick="publishSongToGallery()" class="flex-grow bg-pi-gold hover:bg-pi-goldlight text-purple-950 font-bold text-[10px] py-2 px-3 rounded-xl flex items-center justify-center gap-1 transition-all">
+                                <i class="fa-solid fa-square-plus"></i> <span data-i18n="btn_certify">Certifier</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- DRAWER / POPUP POUR EXPLORER UNE SECTION EN PROFONDEUR -->
+            <div id="drawer-container" class="hidden fixed inset-0 z-50 bg-[#0c0414]/90 backdrop-blur-sm flex items-end justify-center">
+                <div class="bg-[#150824] w-full max-w-md rounded-t-[30px] border-t border-pi-violet/50 p-6 space-y-5 max-h-[75vh] overflow-y-auto">
+                    <div class="flex justify-between items-center border-b border-purple-900/30 pb-3">
+                        <h3 id="drawer-title" class="text-xl font-bold text-pi-gold font-space">Catégorie</h3>
+                        <button onclick="closeDrawer()" class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-slate-400 hover:text-white">
+                            <i class="fa-solid fa-xmark"></i>
+                        </button>
+                    </div>
+                    
+                    <!-- Conteneur de contenu dynamique injecté en JS -->
+                    <div id="drawer-content" class="space-y-4 text-xs text-slate-300">
+                        <!-- Rempli en JS -->
+                    </div>
+                </div>
+            </div>
+
+        </main>
+
+        <!-- BARRE DE NAVIGATION BASSE STABLE -->
+        <nav class="absolute bottom-0 left-0 right-0 bg-[#150824]/95 border-t border-purple-950/40 flex justify-around py-3 px-2 z-40 backdrop-blur-md">
+            <button onclick="switchView('dashboard')" id="nav-dashboard" class="nav-btn text-pi-gold flex flex-col items-center gap-1 flex-1">
+                <i class="fa-solid fa-table-columns text-lg"></i>
+                <span class="text-[9px] font-medium font-space">Dashboard</span>
+            </button>
+            <button onclick="switchView('salons')" id="nav-salons" class="nav-btn text-slate-400 hover:text-white flex flex-col items-center gap-1 flex-1">
+                <i class="fa-solid fa-comments text-lg"></i>
+                <span class="text-[9px] font-medium font-space">Salons</span>
+            </button>
+            <button onclick="switchView('create')" id="nav-create" class="nav-btn text-slate-400 hover:text-white flex flex-col items-center gap-1 flex-1 -mt-2">
+                <i class="fa-solid fa-circle-plus text-3xl text-pi-gold hover:scale-105 transition-transform"></i>
+            </button>
+            <button onclick="switchView('wallet')" id="nav-wallet" class="nav-btn text-slate-400 hover:text-white flex flex-col items-center gap-1 flex-1">
+                <i class="fa-solid fa-wallet text-lg"></i>
+                <span class="text-[9px] font-medium font-space">Pi Wallet</span>
+            </button>
+            <button onclick="switchView('profile')" id="nav-profile" class="nav-btn text-slate-400 hover:text-white flex flex-col items-center gap-1 flex-1">
+                <i class="fa-solid fa-user text-lg"></i>
+                <span class="text-[9px] font-medium font-space">Profil</span>
+            </button>
+        </nav>
+
+        <!-- SYSTEME DE NOTIFICATIONS & DIALOGUES IN-APP MODAL -->
+        <div id="custom-toast" class="hidden fixed bottom-20 left-1/2 transform -translate-x-1/2 bg-[#1a0f2e] border border-pi-gold text-slate-200 text-xs px-4 py-2.5 rounded-xl shadow-2xl z-50 flex items-center gap-2 max-w-[90%] w-max animate-bounce">
+            <span id="toast-icon">✨</span>
+            <span id="toast-message">Ceci est une notification.</span>
+        </div>
+
+        <div id="custom-modal" class="hidden fixed inset-0 z-50 bg-[#0c0414]/90 backdrop-blur-sm flex items-center justify-center p-4">
+            <div class="bg-[#150824] border border-pi-violet/50 rounded-3xl p-6 w-full max-w-sm space-y-4 text-center">
+                <div class="w-12 h-12 bg-pi-violet/20 text-pi-gold text-xl rounded-full flex items-center justify-center mx-auto">
+                    <i id="modal-icon" class="fa-solid fa-circle-question"></i>
+                </div>
+                <h3 id="modal-title" class="text-base font-bold font-space text-white">Action requise</h3>
+                <p id="modal-text" class="text-xs text-slate-400 max-h-[250px] overflow-y-auto pr-1">Veuillez renseigner les informations ci-dessous.</p>
+                
+                <!-- Inputs optionnels de saisie modal -->
+                <div id="modal-inputs" class="space-y-2 hidden">
+                    <input type="text" id="modal-input-primary" class="w-full bg-[#1a0f2e] border border-purple-900 focus:border-pi-gold focus:outline-none rounded-xl px-3 py-2 text-xs text-slate-100">
+                    <input type="number" step="0.01" id="modal-input-secondary" class="w-full bg-[#1a0f2e] border border-purple-900 focus:border-pi-gold focus:outline-none rounded-xl px-3 py-2 text-xs text-slate-100">
+                </div>
+
+                <div class="flex gap-2">
+                    <button onclick="closeCustomModal(false)" class="flex-1 bg-white/5 hover:bg-white/10 text-slate-300 font-semibold py-2 rounded-xl text-xs transition-all">Fermer</button>
+                    <button id="modal-confirm-btn" class="flex-1 bg-pi-gold hover:bg-pi-goldlight text-purple-950 font-bold py-2 rounded-xl text-xs transition-all">Valider</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- MODAL SPÉCIAL TRIVIA / QUIZ JEU DÉFI -->
+        <div id="trivia-modal" class="hidden fixed inset-0 z-50 bg-[#0c0414]/95 backdrop-blur-sm flex items-center justify-center p-4">
+            <div class="bg-[#1a0f2e] border-2 border-pi-gold/40 rounded-3xl p-6 w-full max-w-sm space-y-4 relative">
+                <button onclick="closeTriviaModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+                <div class="text-center">
+                    <span class="bg-pi-gold/20 text-pi-gold text-[10px] font-black px-3 py-1 rounded-full border border-pi-gold/30">🏆 Défi Quiz IA</span>
+                </div>
+                
+                <div id="trivia-loading" class="text-center py-6 space-y-2">
+                    <i class="fa-solid fa-circle-notch animate-spin text-pi-gold text-2xl"></i>
+                    <p class="text-xs text-slate-300">Génération d'une énigme culturelle originale par Gemini...</p>
+                </div>
+
+                <div id="trivia-content" class="hidden space-y-4">
+                    <p id="trivia-question" class="text-sm font-bold text-white font-space text-center leading-relaxed">...</p>
+                    <div id="trivia-options" class="space-y-2">
+                        <!-- Les options du quiz seront insérées ici dynamiquement -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- MODAL LIVE AUDIO COMPANION CALL -->
+        <div id="live-call-modal" class="hidden fixed inset-0 z-50 bg-[#0c0414]/95 backdrop-blur-sm flex flex-col justify-between p-6">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center gap-2">
+                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                    <span class="text-xs font-semibold text-slate-400 tracking-wider">Connexion en cours...</span>
+                </div>
+                <button onclick="toggleVoiceCall()" class="w-9 h-9 bg-white/5 rounded-full flex items-center justify-center hover:bg-white/10">
+                    <i class="fa-solid fa-xmark text-slate-400 hover:text-white"></i>
+                </button>
+            </div>
+
+            <div class="text-center space-y-4">
+                <div class="relative w-28 h-28 mx-auto">
+                    <div class="absolute inset-0 bg-pi-violet/30 rounded-full animate-ping"></div>
+                    <div class="w-28 h-28 rounded-full bg-gradient-to-tr from-pi-violet to-pi-gigas flex items-center justify-center border-4 border-pi-gold shadow-lg relative z-10">
+                        <i class="fa-solid fa-microphone-lines text-pi-gold text-4xl"></i>
+                    </div>
+                </div>
+                <div>
+                    <h3 id="call-avatar-name" class="text-2xl font-black text-white font-space">Jean-Paul Sartre</h3>
+                    <p id="call-avatar-status" class="text-xs text-pi-gold">Prêt à entamer la conversation philosophique...</p>
+                </div>
+
+                <!-- Live Oscilloscope Animation -->
+                <div class="flex justify-center items-center gap-1.5 h-10">
+                    <div class="w-1 bg-pi-gold rounded-full bar"></div>
+                    <div class="w-1 bg-pi-gold rounded-full bar"></div>
+                    <div class="w-1 bg-pi-gold rounded-full bar"></div>
+                    <div class="w-1 bg-pi-gold rounded-full bar"></div>
+                    <div class="w-1 bg-pi-gold rounded-full bar"></div>
+                </div>
+            </div>
+
+            <div class="space-y-4">
+                <p id="call-live-caption" class="text-xs text-slate-400 italic text-center max-h-24 overflow-y-auto bg-purple-950/20 p-3 rounded-xl border border-purple-900/40">
+                    "Dites quelque chose pour commencer l'entretien en direct."
+                </p>
+                <div class="flex justify-center gap-4">
+                    <button id="btn-toggle-mic" onclick="toggleMic()" class="w-12 h-12 bg-white/5 hover:bg-white/10 rounded-full flex items-center justify-center text-lg text-slate-200">
+                        <i class="fa-solid fa-microphone"></i>
+                    </button>
+                    <button onclick="toggleVoiceCall()" class="w-16 h-12 bg-rose-600 hover:bg-rose-700 rounded-2xl flex items-center justify-center text-lg text-white">
+                        <i class="fa-solid fa-phone-slash"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- LOGIQUE APPLICATIVE ET INTERACTIVITÉ SCRIPTÉE -->
+    <script>
+        // --- DICTIONNAIRE MULTILINGUE POUR LA TRADUCTION (5 LANGUES: FR, EN, ES, ZH, AR) ---
+        const translations = {
+            fr: {
+                splash_subtitle: "ESPACE CULTUREL DES PIONNIERS",
+                splash_desc: "Bâtir l'avenir de la culture avec l'intelligence humaine & artificielle au sein de la communauté Pi.",
+                splash_btn_enter: "ENTRER DANS L'ESPACE",
+                header_subtitle: "Espace Culturel des Pionniers",
+                notif_title: "Notifications",
+                notif_clear: "Tout marquer comme lu",
+                notif_msg_1: "a partagé une nouvelle œuvre sculptée assistée par IA.",
+                notif_msg_2: "Votre création de collection a reçu un pourboire de",
+                main_quote: '"La culture ne s\'hérite pas, elle se conquiert." – André Malraux',
+                badge_new_ia: "Nouveauté IA",
+                quiz_card_title: "Le Grand Quiz des Pionniers",
+                quiz_card_desc: "Testez vos connaissances et gagnez des jetons de création Pi !",
+                btn_play: "Jouer",
+                badge_live_vocal: "Salon Vocal IA Direct",
+                vocal_card_title: "Discuter avec un Avatar Historique",
+                vocal_card_desc: "Entrez en communication vocale directe avec des esprits brillants du passé.",
+                btn_call: "Appeler",
+                cat_books_title: "LIVRES - ÉCRITS",
+                quote_voltaire: '"La parole passe, le style reste." – Voltaire',
+                sub_romans: "Romans",
+                sub_poetry: "Poésie",
+                sub_essays: "Essais",
+                sub_theater: "Théâtre",
+                cat_arts_title: "ARTS VISUELS",
+                quote_klee: '"L\'art rend visible." – Paul Klee',
+                sub_peinture: "Peinture",
+                sub_photo: "Photo",
+                sub_digital: "Art Digital",
+                sub_sculpture: "Sculpture",
+                cat_music_title: "MUSIQUE",
+                quote_cioran: '"La musique est la langue des passions." – Cioran',
+                sub_compositions: "Compositions",
+                sub_chansons: "Chansons",
+                sub_instruments: "Instruments",
+                sub_discoveries: "Découvertes",
+                cat_sport_title: "SPORT",
+                quote_juvenal: '"Mens sana in corpore sano." – Juvénal',
+                sub_news: "Actualités",
+                sub_tips: "Conseils",
+                sub_competitions: "Compétitions",
+                sub_defis: "Défis Club",
+                chat_welcome: "Début du canal interactif culturel",
+                chat_intro_bot: "Bonjour pionnier ! Je suis l'IA culturelle résidente de ce salon. Posez-moi vos questions de philosophie, demandez-moi un poème ou des conseils créatifs ! 🚀",
+                chat_thinking: "L'IA Pionnière réfléchit à une réponse culturelle...",
+                chat_placeholder: "Rédiger votre message...",
+                wallet_status: "Connecté",
+                wallet_available: "Solde disponible",
+                wallet_btn_tip: "Donner un pourboire",
+                wallet_btn_mine: "Miner (24h)",
+                wallet_transactions: "Transactions Artistiques",
+                wallet_hist_1: "Achat Romans: Voltaire",
+                wallet_hist_2: "Recompense Don Poème",
+                profile_subtitle: "Créateur de culture d'élite",
+                profile_stat_writings: "Écrits",
+                profile_stat_arts: "Œuvres",
+                profile_stat_rating: "Note Club",
+                profile_badges_title: "Badges Pi Débloqués",
+                badge_poet: "Poète",
+                badge_designer: "Designer",
+                badge_active: "Actif",
+                badge_sponsor: "Mécène",
+                profile_exit_session: "Retourner à l'accueil",
+                tab_create_text: "Texte & Écrit",
+                tab_create_art: "Art IA",
+                tab_create_composer: "Compositeur",
+                create_label_cat: "Catégorie d'art",
+                create_label_title: "Titre de votre œuvre",
+                create_label_body: "Corps / Écrit",
+                create_placeholder_title: "Saisir le titre...",
+                create_placeholder_body: "Tapez vos mots ou décrivez votre art...",
+                create_btn_publish: "Publier et certifier sur Pi Block",
+                text_magnifier_btn: "Magnifier",
+                art_studio_title: "Studio Créatif Imagen 4",
+                art_studio_desc: "Générez des œuvres d'art numériques époustouflantes, puis utilisez l'Éditeur Multitours pour modifier dynamiquement les créations !",
+                art_placeholder_prompt: "Ex: Une peinture néo-futuriste d'un astronaute jouant du violon dans un jardin suspendu de néons violet, style cyberpunk...",
+                ratio_square: "Format Carré (1:1)",
+                ratio_landscape: "Paysage (16:9)",
+                btn_generate_art: "Générer l'œuvre d'art",
+                music_composer_title: "Compositeur Virtuel de Chansons",
+                music_composer_desc: "Laissez Gemini composer un morceau de musique complet, incluant tempo, grille d'accords et paroles originales sur mesure.",
+                music_label_prompt: "Thématique ou Inspiration",
+                music_placeholder_prompt: "Ex: Voyage d'un astronaute solitaire, Nostalgie de Paris...",
+                music_label_style: "Style Musical",
+                music_label_key: "Tonalité souhaitée",
+                btn_compose_music: "Composer la Chanson",
+                btn_listen: "Écouter la Chanson",
+                btn_certify: "Certifier sur Pi"
+            },
+            en: {
+                splash_subtitle: "PIONEERS CULTURAL SPACE",
+                splash_desc: "Building the future of culture with human & artificial intelligence within the Pi community.",
+                splash_btn_enter: "ENTER THE SPACE",
+                header_subtitle: "Pioneers Cultural Space",
+                notif_title: "Notifications",
+                notif_clear: "Mark all as read",
+                notif_msg_1: "shared a new AI-assisted sculpted artwork.",
+                notif_msg_2: "Your collection creation received a tip of",
+                main_quote: '"Culture is not inherited, it is conquered." – André Malraux',
+                badge_new_ia: "New AI Features",
+                quiz_card_title: "The Great Pioneers Quiz",
+                quiz_card_desc: "Test your knowledge and win Pi creation tokens!",
+                btn_play: "Play",
+                badge_live_vocal: "Direct AI Voice Room",
+                vocal_card_title: "Chat with a Historical Avatar",
+                vocal_card_desc: "Enter direct voice communication with brilliant minds of the past.",
+                btn_call: "Call",
+                cat_books_title: "BOOKS - WRITINGS",
+                quote_voltaire: '"Words pass, style remains." – Voltaire',
+                sub_romans: "Novels",
+                sub_poetry: "Poetry",
+                sub_essays: "Essays",
+                sub_theater: "Theater",
+                cat_arts_title: "VISUAL ARTS",
+                quote_klee: '"Art makes visible." – Paul Klee',
+                sub_peinture: "Painting",
+                sub_photo: "Photo",
+                sub_digital: "Digital Art",
+                sub_sculpture: "Sculpture",
+                cat_music_title: "MUSIC",
+                quote_cioran: '"Music is the language of passions." – Cioran',
+                sub_compositions: "Compositions",
+                sub_chansons: "Songs",
+                sub_instruments: "Instruments",
+                sub_discoveries: "Discoveries",
+                cat_sport_title: "SPORT",
+                quote_juvenal: '"A healthy mind in a healthy body." – Juvenal',
+                sub_news: "News",
+                sub_tips: "Tips",
+                sub_competitions: "Competitions",
+                sub_defis: "Club Challenges",
+                chat_welcome: "Beginning of the interactive cultural channel",
+                chat_intro_bot: "Hello pioneer! I am the resident cultural AI of this room. Ask me your philosophy questions, request a poem, or ask for creative advice! 🚀",
+                chat_thinking: "The Pioneer AI is thinking about a cultural response...",
+                chat_placeholder: "Type your message...",
+                wallet_status: "Connected",
+                wallet_available: "Available balance",
+                wallet_btn_tip: "Give a tip",
+                wallet_btn_mine: "Mine (24h)",
+                wallet_transactions: "Artistic Transactions",
+                wallet_hist_1: "Purchase Novels: Voltaire",
+                wallet_hist_2: "Poem Donation Reward",
+                profile_subtitle: "Elite culture creator",
+                profile_stat_writings: "Writings",
+                profile_stat_arts: "Works",
+                profile_stat_rating: "Club Rating",
+                profile_badges_title: "Unlocked Pi Badges",
+                badge_poet: "Poet",
+                badge_designer: "Designer",
+                badge_active: "Active",
+                badge_sponsor: "Sponsor",
+                profile_exit_session: "Back to Home",
+                tab_create_text: "Text & Writing",
+                tab_create_art: "AI Art",
+                tab_create_composer: "Composer",
+                create_label_cat: "Art Category",
+                create_label_title: "Title of your work",
+                create_label_body: "Body / Writing",
+                create_placeholder_title: "Enter title...",
+                create_placeholder_body: "Type your words or describe your art...",
+                create_btn_publish: "Publish and certify on Pi Block",
+                text_magnifier_btn: "Magnify",
+                art_studio_title: "Creative Studio Imagen 4",
+                art_studio_desc: "Generate stunning digital artworks, then use the Multi-turn Editor to dynamically modify creations!",
+                art_placeholder_prompt: "Ex: A neo-futuristic painting of an astronaut playing the violin in a suspended neon garden, cyberpunk style...",
+                ratio_square: "Square Format (1:1)",
+                ratio_landscape: "Landscape (16:9)",
+                btn_generate_art: "Generate Artwork",
+                music_composer_title: "Virtual Song Composer",
+                music_composer_desc: "Let Gemini compose a complete piece of music, including tempo, chord chart and custom original lyrics.",
+                music_label_prompt: "Theme or Inspiration",
+                music_placeholder_prompt: "Ex: Journey of a lonely astronaut, Nostalgia of Paris...",
+                music_label_style: "Musical Style",
+                music_label_key: "Desired Key",
+                btn_compose_music: "Compose Song",
+                btn_listen: "Listen (TTS)",
+                btn_certify: "Certify on Pi"
+            },
+            es: {
+                splash_subtitle: "ESPACIO CULTURAL DE LOS PIONEROS",
+                splash_desc: "Construyendo el futuro de la cultura con inteligencia humana y artificial en la comunidad Pi.",
+                splash_btn_enter: "ENTRAR AL ESPACIO",
+                header_subtitle: "Espacio Cultural de los Pioneros",
+                notif_title: "Notificaciones",
+                notif_clear: "Marcar todo como leído",
+                notif_msg_1: "compartió una nueva obra esculpida asistida por IA.",
+                notif_msg_2: "Su creación de colección recibió una propina de",
+                main_quote: '"La cultura no se hereda, se conquista." – André Malraux',
+                badge_new_ia: "Novedad IA",
+                quiz_card_title: "El Gran Quiz de los Pioneros",
+                quiz_card_desc: "¡Pon a prueba tus conocimientos y gana tokens de creación Pi!",
+                btn_play: "Jugar",
+                badge_live_vocal: "Sala de Voz IA Directa",
+                vocal_card_title: "Chatear con un Avatar Histórico",
+                vocal_card_desc: "Entra en comunicación de voz directa con mentes brillantes del pasado.",
+                btn_call: "Llamar",
+                cat_books_title: "LIBROS - ESCRITOS",
+                quote_voltaire: '"La palabra pasa, el estilo queda." – Voltaire',
+                sub_romans: "Novelas",
+                sub_poetry: "Poesía",
+                sub_essays: "Ensayos",
+                sub_theater: "Teatro",
+                cat_arts_title: "ARTES VISUALES",
+                quote_klee: '"El arte hace visible." – Paul Klee',
+                sub_peinture: "Pintura",
+                sub_photo: "Foto",
+                sub_digital: "Arte Digital",
+                sub_sculpture: "Escultura",
+                cat_music_title: "MÚSICA",
+                quote_cioran: '"La música es el lenguaje de las pasiones." – Cioran',
+                sub_compositions: "Composiciones",
+                sub_chansons: "Canciones",
+                sub_instruments: "Instrumentos",
+                sub_discoveries: "Descubrimientos",
+                cat_sport_title: "DEPORTE",
+                quote_juvenal: '"Mens sana in corpore sano." – Juvénal',
+                sub_news: "Noticias",
+                sub_tips: "Consejos",
+                sub_competitions: "Competiciones",
+                sub_defis: "Desafíos",
+                chat_welcome: "Inicio del canal cultural interactivo",
+                chat_intro_bot: "¡Hola pionero! Soy la IA cultural residente de esta sala. ¡Hazme tus preguntas de filosofía, pídeme un poema o consejos creativos! 🚀",
+                chat_thinking: "La IA Pionera está pensando en una respuesta cultural...",
+                chat_placeholder: "Escribe tu mensaje...",
+                wallet_status: "Conectado",
+                wallet_available: "Saldo disponible",
+                wallet_btn_tip: "Dar propina",
+                wallet_btn_mine: "Minar (24h)",
+                wallet_transactions: "Transacciones Artísticas",
+                wallet_hist_1: "Compra Novelas: Voltaire",
+                wallet_hist_2: "Recompensa Donación Poema",
+                profile_subtitle: "Creador de cultura de élite",
+                profile_stat_writings: "Escritos",
+                profile_stat_arts: "Obras",
+                profile_stat_rating: "Nota Club",
+                profile_badges_title: "Insignias Pi Desbloqueadas",
+                badge_poet: "Poeta",
+                badge_designer: "Diseñador",
+                badge_active: "Activo",
+                badge_sponsor: "Mecenas",
+                profile_exit_session: "Volver al Inicio",
+                tab_create_text: "Texto y Escritura",
+                tab_create_art: "Arte IA",
+                tab_create_composer: "Compositor",
+                create_label_cat: "Categoría de arte",
+                create_label_title: "Título de tu obra",
+                create_label_body: "Cuerpo / Escritura",
+                create_placeholder_title: "Escribe el título...",
+                create_placeholder_body: "Escribe tus palabras o describe tu arte...",
+                create_btn_publish: "Publicar y certificar en Pi Block",
+                text_magnifier_btn: "Magnificar",
+                art_studio_title: "Estudio Creativo Imagen 4",
+                art_studio_desc: "¡Genera impresionantes obras de arte digitales y luego usa el Editor Multiturno para modificarlas de forma dinámica!",
+                art_placeholder_prompt: "Ej: Una pintura neofuturista de un astronauta tocando el violín en un jardín de neón, estilo cyberpunk...",
+                ratio_square: "Formato Cuadrado (1:1)",
+                ratio_landscape: "Paisaje (16:9)",
+                btn_generate_art: "Generar Obra de Arte",
+                music_composer_title: "Compositor Virtual de Canciones",
+                music_composer_desc: "Deja que Gemini componga una pieza musical completa, incluyendo tempo, tabla de acordes y letras originales.",
+                music_label_prompt: "Temática o Inspiración",
+                music_placeholder_prompt: "Ej: El viaje de un astronauta solitario, Nostalgia de París...",
+                music_label_style: "Estilo Musical",
+                music_label_key: "Tonalidad deseada",
+                btn_compose_music: "Componer Canción",
+                btn_listen: "Escuchar (TTS)",
+                btn_certify: "Certificar en Pi"
+            },
+            zh: {
+                splash_subtitle: "先锋文化空间",
+                splash_desc: "在 Pi 社区内，用人类与人工智能共同筑建文化的未来。",
+                splash_btn_enter: "进入空间",
+                header_subtitle: "先锋文化空间",
+                notif_title: "通知中心",
+                notif_clear: "全部标记为已读",
+                notif_msg_1: "分享了一件全新的AI辅助雕塑作品。",
+                notif_msg_2: "您的收藏创作收到了一笔打赏：",
+                main_quote: '“文化不是继承的，而是征服的。” —— 安德烈·马尔罗',
+                badge_new_ia: "AI 新功能",
+                quiz_card_title: "先锋大问答",
+                quiz_card_desc: "测试您的文化知识，赢取 Pi 创作代币！",
+                btn_play: "开始答题",
+                badge_live_vocal: "AI 语音直连室",
+                vocal_card_title: "与历史人物对话",
+                vocal_card_desc: "与过去的杰出心灵进行面对面的直接语音交流。",
+                btn_call: "拨打通话",
+                cat_books_title: "图书与写作",
+                quote_voltaire: '“言语会消逝，风格永存。” —— 伏尔泰',
+                sub_romans: "长篇小说",
+                sub_poetry: "诗歌现代",
+                sub_essays: "哲学随笔",
+                sub_theater: "戏剧舞台",
+                cat_arts_title: "视觉艺术",
+                quote_klee: '“艺术使无形显现。” —— 保罗·克利',
+                sub_peinture: "传统绘画",
+                sub_photo: "创意摄影",
+                sub_digital: "数字艺术",
+                sub_sculpture: "空间雕塑",
+                cat_music_title: "经典音乐",
+                quote_cioran: '“音乐是激情的语言。” —— 萧沆',
+                sub_compositions: "乐曲谱写",
+                sub_chansons: "原创歌曲",
+                sub_instruments: "器乐演奏",
+                sub_discoveries: "新乐发现",
+                cat_sport_title: "社区体育",
+                quote_juvenal: '“健全的精神寓于健康的身体。” —— 朱文纳尔',
+                sub_news: "体育动态",
+                sub_tips: "健康小贴士",
+                sub_competitions: "赛事日程",
+                sub_defis: "俱乐部挑战",
+                chat_welcome: "互动文化频道已开启",
+                chat_intro_bot: "你好，先锋！我是该聊天室的常驻文化 AI。你可以随时向我提问哲学问题、向我索要诗歌或寻找创作灵感！🚀",
+                chat_thinking: "先锋 AI 正在构思文化回复...",
+                chat_placeholder: "输入您的消息...",
+                wallet_status: "已连接",
+                wallet_available: "可用余额",
+                wallet_btn_tip: "打赏创作者",
+                wallet_btn_mine: "启动挖矿 (24h)",
+                wallet_transactions: "艺术链上交易",
+                wallet_hist_1: "购买小说：伏尔泰",
+                wallet_hist_2: "诗歌捐赠奖励",
+                profile_subtitle: "精英级文化创作者",
+                profile_stat_writings: "创作篇数",
+                profile_stat_arts: "艺术品数",
+                profile_stat_rating: "俱乐部评分",
+                profile_badges_title: "已解锁 Pi 勋章",
+                badge_poet: "诗人创作者",
+                badge_designer: "视觉设计师",
+                badge_active: "活跃先锋",
+                badge_sponsor: "艺术赞助人",
+                profile_exit_session: "退出并返回首页",
+                tab_create_text: "文本与写作",
+                tab_create_art: "AI 艺术绘画",
+                tab_create_composer: "智能作曲",
+                create_label_cat: "艺术品分类",
+                create_label_title: "作品标题",
+                create_label_body: "正文 / 内容描述",
+                create_placeholder_title: "请输入作品标题...",
+                create_placeholder_body: "输入您的文字，或对您想创作的艺术进行描述...",
+                create_btn_publish: "在 Pi 区块链上发布并确权",
+                text_magnifier_btn: "一键美化",
+                art_studio_title: "Imagen 4 创意画室",
+                art_studio_desc: "生成令人惊叹的数字艺术画作，并能通过多轮对话进行细节微调修改！",
+                art_placeholder_prompt: "例如：一件新未来主义绘画，宇航员在霓虹悬浮花园拉小提琴，赛博朋克风格...",
+                ratio_square: "方形规格 (1:1)",
+                ratio_landscape: "宽屏规格 (16:9)",
+                btn_generate_art: "生成艺术画作",
+                music_composer_title: "虚拟歌曲作曲家",
+                music_composer_desc: "让 Gemini 智能创作出完整的词曲，包括速度、和弦图以及定制的歌词。",
+                music_label_prompt: "歌曲创作主题",
+                music_placeholder_prompt: "例如：孤独宇航员的太空旅程，巴黎的思乡曲...",
+                music_label_style: "音乐流派",
+                music_label_key: "期望调式",
+                btn_compose_music: "一键生成词曲",
+                btn_listen: "播放语音 (TTS)",
+                btn_certify: "在 Pi 链上认证"
+            },
+            ar: {
+                splash_subtitle: "الفضاء الثقافي للرواد",
+                splash_desc: "بناء مستقبل الثقافة بالذكاء البشري والاصطناعي داخل مجتمع Pi.",
+                splash_btn_enter: "دخول الفضاء",
+                header_subtitle: "الفضاء الثقافي للرواد",
+                notif_title: "الإشعارات",
+                notif_clear: "تحديد الكل كمقروء",
+                notif_msg_1: "شارك عملاً منحوتاً جديداً بمساعدة الذكاء الاصطناعي.",
+                notif_msg_2: "تلقى عملك الإبداعي مكافأة بقيمة",
+                main_quote: '«الثقافة لا تُورث، بل تُكتسب.» – أندريه مالرو',
+                badge_new_ia: "جديد الذكاء الاصطناعي",
+                quiz_card_title: "مسابقة الرواد الكبرى",
+                quiz_card_desc: "اختبر معلوماتك واربح رموز Pi الإبداعية!",
+                btn_play: "لعب",
+                badge_live_vocal: "غرفة الصوت المباشر للذكاء الاصطناعي",
+                vocal_card_title: "تحدث مع شخصية تاريخية",
+                vocal_card_desc: "ادخل في اتصال صوتي مباشر مع عقول لامعة من الماضي.",
+                btn_call: "اتصال",
+                cat_books_title: "الكتب - الكتابات",
+                quote_voltaire: '«الكلمات تزول، والأسلوب يبقى.» – فولتير',
+                sub_romans: "روايات",
+                sub_poetry: "شعر",
+                sub_essays: "مقال",
+                sub_theater: "مسرح",
+                cat_arts_title: "الفنون البصرية",
+                quote_klee: '«الفن يجعل المرئي مرئياً.» – بول كلي',
+                sub_peinture: "رسم",
+                sub_photo: "تصوير",
+                sub_digital: "الفن الرقمي",
+                sub_sculpture: "نحت",
+                cat_music_title: "الموسيقى",
+                quote_cioran: '«الموسيقى هي لغة العواطف.» – سيوران',
+                sub_compositions: "تأليفات",
+                sub_chansons: "أغاني",
+                sub_instruments: "آلات موسيقية",
+                sub_discoveries: "اكتشافات",
+                cat_sport_title: "الرياضة",
+                quote_juvenal: '«العقل السليم في الجسم السليم.» – جوفينال',
+                sub_news: "أخبار الرياضة",
+                sub_tips: "نصائح",
+                sub_competitions: "مسابقات",
+                sub_defis: "تحديات النادي",
+                chat_welcome: "بداية القناة الثقافية التفاعلية",
+                chat_intro_bot: "مرحباً أيها الرائد! أنا الذكاء الاصطناعي الثقافي المقيم في هذا الصالون. اطرح عليّ أسئلتك الفلسفية، أو اطلب مني قصيدة أو نصائح إبداعية! 🚀",
+                chat_thinking: "الذكاء الاصطناعي للرواد يفكر في إجابة ثقافية...",
+                chat_placeholder: "اكتب رسالتك...",
+                wallet_status: "متصل",
+                wallet_available: "الرصيد المتاح",
+                wallet_btn_tip: "تقديم مكافأة",
+                wallet_btn_mine: "تعدين (24 ساعة)",
+                wallet_transactions: "المعاملات الفنية",
+                wallet_hist_1: "شراء رواية: فولتير",
+                wallet_hist_2: "مكافأة تبرع بقصيدة",
+                profile_subtitle: "صانع ثقافة النخبة",
+                profile_stat_writings: "كتابات",
+                profile_stat_arts: "أعمال",
+                profile_stat_rating: "تقييم النادي",
+                profile_badges_title: "شارات Pi المفتوحة",
+                badge_poet: "شاعر",
+                badge_designer: "مصمم",
+                badge_active: "نشط",
+                badge_sponsor: "رائد أعمال",
+                profile_exit_session: "العودة إلى الرئيسية",
+                tab_create_text: "نص وكتابة",
+                tab_create_art: "فن الذكاء الاصطناعي",
+                tab_create_composer: "ملحن",
+                create_label_cat: "فئة الفن",
+                create_label_title: "عنوان عملك",
+                create_label_body: "المحتوى / الكتابة",
+                create_placeholder_title: "أدخل العنوان...",
+                create_placeholder_body: "اكتب كلماتك أو صف فنك...",
+                create_btn_publish: "نشر وتوثيق على كتلة Pi",
+                text_magnifier_btn: "تحسين",
+                art_studio_title: "استوديو إيماجين 4 الإبداعي",
+                art_studio_desc: "أنتج أعمالاً فنية رقمية مذهلة، ثم استخدم محرر التعديل المتعدد لتعديل الإبداعات ديناميكياً!",
+                art_placeholder_prompt: "مثال: لوحة مستقبلية جديدة لرائد فضاء يعزف على الكمان في حديقة معلقة من النيون، أسلوب سايبربانك...",
+                ratio_square: "صيغة مربعة (1:1)",
+                ratio_landscape: "صيغة أفقية (16:9)",
+                btn_generate_art: "إنتاج العمل الفني",
+                music_composer_title: "ملحن الأغاني الافتراضي",
+                music_composer_desc: "دع جيميناي يؤلف قطعة موسيقية كاملة، بما في ذلك السرعة ومخطط الأوتار والكلمات الأصلية المخصصة.",
+                music_label_prompt: "الموضوع أو الإلهام",
+                music_placeholder_prompt: "مثال: رحلة رائد فضاء وحيد، الحنين إلى باريس...",
+                music_label_style: "الأسلوب الموسيقي",
+                music_label_key: "المفتاح الموسيقي المطلوب",
+                btn_compose_music: "تأليف الأغنية",
+                btn_listen: "استماع (TTS)",
+                btn_certify: "توثيق على Pi"
+            }
+        };
+
+        // --- ÉTATS GLOBAUX DE L'APPLICATION ---
+        let currentLang = 'fr';
+        let piBalance = 3.14159;
+        let isMiningActive = false;
+        let selectedAspectRatio = '1:1';
+        let currentCreateTab = 'text';
+        let currentChatRoom = '#generale';
+        let currentAudio = null; // Stockage audio courant
+        let customModalCallback = null;
+
+        let imageEditHistory = []; 
+        let currentGeneratedImageBase64 = null;
+        let originalArtPrompt = "";
+
+        let isVoiceCallActive = false;
+        let isMicMuted = false;
+
+        // Base de données des créations de l'Espace Culturel
+        const customArtGallery = {
+            livres: [
+                { title: '"Candide" - Voltaire (Essai)', desc: 'Édition spéciale certifiée Pionnier. Un voyage philosophique.', price: 0.10, isFree: false, content: 'Bâtissons notre bonheur en cultivant notre jardin intérieur, au milieu d\'un monde complexe.' },
+                { title: '"Les Fleurs du Mal" - Baudelaire (Poésie)', desc: 'Poèmes mélancoliques d\'une pure beauté stylistique.', price: 0.0, isFree: true, content: 'La Nature est un temple où de vivants piliers laissent parfois sortir de confuses paroles.' }
+            ],
+            arts: [
+                { title: '"Nuit Étoilée" - @Pioneer_Pixel', desc: 'Hommage à Van Gogh réinventé sous forme de blocs de données.', price: 0.50, isFree: false, content: 'Une œuvre picturale numérique représentant une nuit mystique traversée par des flux de blocs.' }
+            ],
+            musique: [
+                { title: '"Symphonie Pi 1.0" - @Moza_Crypto', desc: 'Mélodie générée à partir des décimales du nombre Pi.', price: 0.0, isFree: true, content: 'Mélodie harmonieuse et cyclique, codée mathématiquement par les suites infinies de décimales.' }
+            ],
+            sport: [
+                { title: 'Défi "314 Pompes" de la semaine', desc: 'Relevez le défi pour prouver votre forme physique !', price: 0.0, isFree: true, content: 'Série sportive exigeante divisée en plusieurs étapes pour stimuler le corps et l\'esprit.' }
+            ]
+        };
+
+        // --- STREAMING_CHUNK: Setting Up Translation Engine (i18n) & UI Swapping... ---
+        // Fonction de Traduction Dynamique
+        function changeLanguage(lang) {
+            currentLang = lang;
+            const dict = translations[lang] || translations['fr'];
+
+            // Modification de la direction d'écriture (RTL) si Arabe
+            const htmlRoot = document.getElementById('html-root');
+            if (lang === 'ar') {
+                htmlRoot.setAttribute('dir', 'rtl');
+                // Aligner le texte
+                document.body.classList.add('text-right');
+                // Retourner l'icône de navigation
+                document.getElementById('splash-arrow').className = "fa-solid fa-arrow-left-long text-base";
+                document.getElementById('nav-arrow-books').className = "fa-solid fa-chevron-left text-base group-hover:-translate-x-1 transition-transform";
+                document.getElementById('nav-arrow-arts').className = "fa-solid fa-chevron-left text-base group-hover:-translate-x-1 transition-transform";
+                document.getElementById('nav-arrow-music').className = "fa-solid fa-chevron-left text-base group-hover:-translate-x-1 transition-transform";
+                document.getElementById('nav-arrow-sport').className = "fa-solid fa-chevron-left text-base group-hover:-translate-x-1 transition-transform";
+                document.getElementById('chat-send-icon').className = "fa-solid fa-paper-plane transform rotate-180";
+                document.getElementById('btn-logout-icon').className = "fa-solid fa-right-from-bracket rotate-180 mr-2";
+            } else {
+                htmlRoot.setAttribute('dir', 'ltr');
+                document.body.classList.remove('text-right');
+                document.getElementById('splash-arrow').className = "fa-solid fa-arrow-right-long text-base";
+                document.getElementById('nav-arrow-books').className = "fa-solid fa-chevron-right text-base group-hover:translate-x-1 transition-transform";
+                document.getElementById('nav-arrow-arts').className = "fa-solid fa-chevron-right text-base group-hover:translate-x-1 transition-transform";
+                document.getElementById('nav-arrow-music').className = "fa-solid fa-chevron-right text-base group-hover:translate-x-1 transition-transform";
+                document.getElementById('nav-arrow-sport').className = "fa-solid fa-chevron-right text-base group-hover:translate-x-1 transition-transform";
+                document.getElementById('chat-send-icon').className = "fa-solid fa-paper-plane";
+                document.getElementById('btn-logout-icon').className = "fa-solid fa-right-from-bracket mr-2";
+            }
+
+            // Traduction des textes (data-i18n)
+            document.querySelectorAll('[data-i18n]').forEach(element => {
+                const key = element.getAttribute('data-i18n');
+                if (dict[key]) {
+                    element.innerHTML = dict[key];
+                }
+            });
+
+            // Traduction des placeholders (data-placeholder-i18n)
+            document.querySelectorAll('[data-placeholder-i18n]').forEach(element => {
+                const key = element.getAttribute('data-placeholder-i18n');
+                if (dict[key]) {
+                    element.setAttribute('placeholder', dict[key]);
+                }
+            });
+
+            // Mise à jour de l'état graphique des boutons du sélecteur
+            document.querySelectorAll('.lang-indicator').forEach(btn => {
+                btn.classList.remove('border-pi-gold', 'text-pi-gold');
+            });
+            const activeIndicator = document.getElementById(`splash-lang-${lang}`);
+            if (activeIndicator) {
+                activeIndicator.classList.add('border-pi-gold', 'text-pi-gold');
+            }
+
+            showToast(lang === 'zh' ? "语言已切换为中文" : lang === 'ar' ? "تم تغيير اللغة إلى العربية" : lang === 'es' ? "Idioma cambiado" : lang === 'en' ? "Language changed" : "Langue modifiée !", "🌐");
+        }
+
+        // --- SYSTÈME D'ENTRÉE ET DE SORTIE APPLICATIVE ---
+        function enterApplication() {
+            const splash = document.getElementById('view-splash');
+            splash.classList.add('opacity-0', 'pointer-events-none');
+            setTimeout(() => {
+                splash.classList.add('hidden');
+            }, 700);
+            
+            const helloMsg = currentLang === 'zh' ? "欢迎来到先锋文化空间！" : currentLang === 'ar' ? "مرحباً بك في الفضاء الثقافي للرواد!" : "Bienvenue dans l'Espace Culturel ! 👋";
+            showToast(helloMsg, "👋");
+        }
+
+        function exitToSplash() {
+            const splash = document.getElementById('view-splash');
+            splash.classList.remove('hidden');
+            setTimeout(() => {
+                splash.classList.remove('opacity-0', 'pointer-events-none');
+            }, 50);
+            
+            const byeMsg = currentLang === 'zh' ? "会话关闭" : currentLang === 'ar' ? "تم إغلاق الجلسة" : "Session clôturée";
+            showToast(byeMsg, "🔒");
+        }
+
+        // --- TOAST ET MODALS REUSABLES ---
+        function showToast(message, icon = '✨') {
+            const toast = document.getElementById('custom-toast');
+            document.getElementById('toast-icon').innerText = icon;
+            document.getElementById('toast-message').innerText = message;
+            toast.classList.remove('hidden');
+            setTimeout(() => {
+                toast.classList.add('hidden');
+            }, 3000);
+        }
+
+        function openCustomModal(title, text, showInputs, primaryPlaceholder, secondaryPlaceholder, defaultPrimary, defaultSecondary, onConfirm) {
+            document.getElementById('modal-title').innerText = title;
+            document.getElementById('modal-text').innerText = text;
+            const inputsDiv = document.getElementById('modal-inputs');
+            
+            if (showInputs) {
+                inputsDiv.classList.remove('hidden');
+                const prim = document.getElementById('modal-input-primary');
+                const sec = document.getElementById('modal-input-secondary');
+                
+                prim.placeholder = primaryPlaceholder || '';
+                prim.value = defaultPrimary || '';
+                
+                if (secondaryPlaceholder) {
+                    sec.classList.remove('hidden');
+                    sec.placeholder = secondaryPlaceholder;
+                    sec.value = defaultSecondary || '';
+                } else {
+                    sec.classList.add('hidden');
+                }
+            } else {
+                inputsDiv.classList.add('hidden');
+            }
+            
+            document.getElementById('custom-modal').classList.remove('hidden');
+            customModalCallback = onConfirm;
+        }
+
+        function closeCustomModal(confirmed) {
+            document.getElementById('custom-modal').classList.add('hidden');
+            if (confirmed && customModalCallback) {
+                const primaryVal = document.getElementById('modal-input-primary').value;
+                const secondaryVal = document.getElementById('modal-input-secondary').value;
+                customModalCallback(primaryVal, secondaryVal);
+            }
+            customModalCallback = null;
+        }
+
+        document.getElementById('modal-confirm-btn').addEventListener('click', () => {
+            closeCustomModal(true);
+        });
+
+        // --- STREAMING_CHUNK: Managing Navigation and Tab Transitions... ---
+        // Navigation de l'application
+        function switchView(viewName) {
+            ['dashboard', 'salons', 'wallet', 'profile', 'create'].forEach(view => {
+                document.getElementById(`view-${view}`).classList.add('hidden');
+                document.getElementById(`nav-${view}`).classList.remove('text-pi-gold');
+                document.getElementById(`nav-${view}`).classList.add('text-slate-400');
+            });
+            
+            document.getElementById(`view-${viewName}`).classList.remove('hidden');
+            document.getElementById(`nav-${viewName}`).classList.add('text-pi-gold');
+            document.getElementById(`nav-${viewName}`).classList.remove('text-slate-400');
+
+            document.getElementById('main-scroller').scrollTop = 0;
+        }
+
+        function switchCreateTab(tabName) {
+            currentCreateTab = tabName;
+            
+            document.getElementById('create-text-panel').classList.add('hidden');
+            document.getElementById('create-art-panel').classList.add('hidden');
+            document.getElementById('create-music-panel').classList.add('hidden');
+            
+            document.getElementById('tab-create-text').className = "flex-1 py-1.5 text-center text-[10px] font-bold rounded-lg bg-purple-950/40 text-slate-400 shrink-0";
+            document.getElementById('tab-create-art').className = "flex-1 py-1.5 text-center text-[10px] font-bold rounded-lg bg-purple-950/40 text-slate-400 shrink-0";
+            document.getElementById('tab-create-music').className = "flex-1 py-1.5 text-center text-[10px] font-bold rounded-lg bg-purple-950/40 text-slate-400 shrink-0";
+
+            if (tabName === 'text') {
+                document.getElementById('create-text-panel').classList.remove('hidden');
+                document.getElementById('tab-create-text').className = "flex-1 py-1.5 text-center text-[10px] font-bold rounded-lg bg-pi-violet/30 text-white border border-pi-violet/40 shrink-0";
+            } else if (tabName === 'art') {
+                document.getElementById('create-art-panel').classList.remove('hidden');
+                document.getElementById('tab-create-art').className = "flex-1 py-1.5 text-center text-[10px] font-bold rounded-lg bg-pi-violet/30 text-white border border-pi-violet/40 shrink-0";
+            } else if (tabName === 'music') {
+                document.getElementById('create-music-panel').classList.remove('hidden');
+                document.getElementById('tab-create-music').className = "flex-1 py-1.5 text-center text-[10px] font-bold rounded-lg bg-pi-violet/30 text-white border border-pi-violet/40 shrink-0";
+            }
+        }
+
+        function selectAspectRatio(ratio) {
+            selectedAspectRatio = ratio;
+            if (ratio === '1:1') {
+                document.getElementById('ratio-1-1').className = "flex-1 py-1.5 text-[10px] bg-pi-violet border border-pi-violet text-white rounded-lg";
+                document.getElementById('ratio-16-9').className = "flex-1 py-1.5 text-[10px] bg-purple-950/40 border border-purple-900 text-slate-400 rounded-lg";
+            } else {
+                document.getElementById('ratio-1-1').className = "flex-1 py-1.5 text-[10px] bg-purple-950/40 border border-purple-900 text-slate-400 rounded-lg";
+                document.getElementById('ratio-16-9').className = "flex-1 py-1.5 text-[10px] bg-pi-violet border border-pi-violet text-white rounded-lg";
+            }
+        }
+
+        // --- APPELS GLOBAUX GEMINI AVEC BACKOFF ROBUSTE ---
+        async function fetchGemini(userPrompt, systemInstruction = "", formatJson = false, responseSchema = null) {
+            const apiKey = ""; // Clé injectée automatiquement
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+            
+            const payload = {
+                contents: [{ parts: [{ text: userPrompt }] }]
+            };
+
+            if (systemInstruction) {
+                payload.systemInstruction = {
+                    parts: [{ text: systemInstruction }]
+                };
+            }
+
+            if (formatJson) {
+                payload.generationConfig = {
+                    responseMimeType: "application/json"
+                };
+                if (responseSchema) {
+                    payload.generationConfig.responseSchema = responseSchema;
+                }
+            }
+
+            const delays = [1000, 2000, 4000, 8000, 16000];
+            for (let i = 0; i < 5; i++) {
+                try {
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+                    if (response.ok) {
+                        const data = await response.json();
+                        return data.candidates?.[0]?.content?.parts?.[0]?.text || "";
+                    }
+                } catch (e) {
+                    // Fail silencieusement et continue
+                }
+                if (i < 4) {
+                    await new Promise(resolve => setTimeout(resolve, delays[i]));
+                }
+            }
+            throw new Error("Toutes les tentatives de connexion réseau ont échoué.");
+        }
+
+        // --- STREAMING_CHUNK: Processing Chat Rooms & Bot Interactions... ---
+        // Gestion de la messagerie instantanée
+        function switchChatRoom(roomName) {
+            currentChatRoom = roomName;
+            document.querySelectorAll('.chat-tab').forEach(tab => {
+                tab.classList.remove('bg-pi-violet/50', 'border-pi-violet', 'text-white');
+                tab.classList.add('bg-purple-950/40', 'border-purple-900/50', 'text-slate-400');
+            });
+            
+            const activeTabId = roomName === '#generale' ? 'tab-generale' : roomName === '#litterature' ? 'tab-litterature' : 'tab-creation';
+            document.getElementById(activeTabId).classList.add('bg-pi-violet/50', 'border-pi-violet', 'text-white');
+            document.getElementById(activeTabId).classList.remove('bg-purple-950/40', 'border-purple-900/50', 'text-slate-400');
+            
+            const chatBox = document.getElementById('chat-messages');
+            chatBox.innerHTML += `
+                <div class="text-center text-pi-gold text-[10px] py-1">Room ${roomName}</div>
+            `;
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        async function sendChatMessage(e) {
+            e.preventDefault();
+            const input = document.getElementById('chat-input');
+            const message = input.value.trim();
+            if (!message) return;
+
+            const chatBox = document.getElementById('chat-messages');
+            chatBox.innerHTML += `
+                <div class="flex flex-col gap-1 items-end">
+                    <span class="text-[10px] text-purple-400 font-bold">Pioneer</span>
+                    <div class="bg-pi-violet/30 p-2.5 rounded-l-xl rounded-br-xl max-w-[85%] text-slate-100 border border-pi-violet/30">
+                        ${message}
+                    </div>
+                </div>
+            `;
+            input.value = '';
+            chatBox.scrollTop = chatBox.scrollHeight;
+
+            const loader = document.getElementById('chat-loading');
+            loader.classList.remove('hidden');
+
+            let systemPrompt = "";
+            let senderName = "Pioneer_AI";
+            if (currentChatRoom === '#generale') {
+                systemPrompt = `You are a wise digital philosopher. Reply dynamically in the current language context: ${currentLang}. Keep it elegant, max 3 sentences.`;
+                senderName = "Socrate_IA";
+            } else if (currentChatRoom === '#litterature') {
+                systemPrompt = `You are a classical literary companion. Reply lyrically in the current language context: ${currentLang}. Max 3 sentences.`;
+                senderName = "Hugo_IA";
+            } else {
+                systemPrompt = `You are a cyberpunk visual designer. Give creative advice in the current language context: ${currentLang}. Max 3 sentences.`;
+                senderName = "DaVinci_IA";
+            }
+
+            try {
+                const aiResponse = await fetchGemini(message, systemPrompt);
+                loader.classList.add('hidden');
+                
+                chatBox.innerHTML += `
+                    <div class="flex flex-col gap-1 items-start">
+                        <span class="text-[10px] text-pi-gold font-bold flex items-center gap-1">
+                            <i class="fa-solid fa-wand-magic-sparkles text-[8px]"></i> @${senderName}
+                        </span>
+                        <div class="bg-white/5 p-2.5 rounded-r-xl rounded-bl-xl max-w-[85%] text-slate-200">
+                            ${aiResponse}
+                        </div>
+                    </div>
+                `;
+                chatBox.scrollTop = chatBox.scrollHeight;
+            } catch (err) {
+                loader.classList.add('hidden');
+                showToast("Error connected to Gemini.", "❌");
+            }
+        }
+
+        // --- STREAMING_CHUNK: Processing Text Sublimation (Magnifier)... ---
+        // Magnifier et magnifier les mots du Pioneer
+        async function optimizeTextWithIA() {
+            const bodyArea = document.getElementById('create-body');
+            const textToOptimize = bodyArea.value.trim();
+            const selectedStyle = document.getElementById('sublimation-style').value;
+            
+            if (!textToOptimize) {
+                showToast("No content to optimize.", "⚠️");
+                return;
+            }
+
+            const btn = document.getElementById('btn-optimize');
+            const originalHtml = btn.innerHTML;
+            btn.innerHTML = `<i class="fa-solid fa-circle-notch animate-spin"></i> Sublimation...`;
+            btn.disabled = true;
+
+            const stylePrompts = {
+                classic: "classic refined 19th-century French literary style",
+                cyberpunk: "cyberpunk futuristic style with neon, network, and data tones",
+                romantic: "passionate, vibrant romantic style",
+                melancholic: "deeply nostalgic, philosophically melancholic style"
+            };
+
+            const sysInstruction = `You are the Master Editor. Sublimator and rewrite the user's text into the ${stylePrompts[selectedStyle]}. Keep the essence but magnify the style. Reply ONLY in the requested text language (user inputs in current: ${currentLang}), without comments. Max 4 sentences.`;
+
+            try {
+                const resultText = await fetchGemini(textToOptimize, sysInstruction);
+                bodyArea.value = resultText;
+                showToast("Sublimation completed!", "✨");
+            } catch (err) {
+                showToast("Failed to optimize text.", "❌");
+            } finally {
+                btn.innerHTML = originalHtml;
+                btn.disabled = false;
+            }
+        }
+
+        // --- STREAMING_CHUNK: Integrating Dynamic Trivia Quiz Engine... ---
+        // Démarrage du Grand Quiz
+        async function startDailyQuiz() {
+            const modal = document.getElementById('trivia-modal');
+            const loading = document.getElementById('trivia-loading');
+            const content = document.getElementById('trivia-content');
+            
+            modal.classList.remove('hidden');
+            loading.classList.remove('hidden');
+            content.classList.add('hidden');
+
+            const quizPrompt = `Generate one challenging world culture, art, or literature trivia question. Provide exactly 4 options. Specify the correct index (0 to 3). Output ONLY as structured JSON. Respond in the current user language: ${currentLang}.`;
+            
+            const responseSchema = {
+                type: "OBJECT",
+                properties: {
+                    question: { type: "STRING", description: "The culture question" },
+                    options: {
+                        type: "ARRAY",
+                        items: { type: "STRING" },
+                        description: "4 options"
+                    },
+                    correctIndex: { type: "INTEGER", description: "Index of correct answer from 0 to 3" }
+                },
+                required: ["question", "options", "correctIndex"]
+            };
+
+            try {
+                const jsonText = await fetchGemini(quizPrompt, "You are the Trivia Master. Return JSON only.", true, responseSchema);
+                const quizData = JSON.parse(jsonText);
+                
+                document.getElementById('trivia-question').innerText = quizData.question;
+                const optionsDiv = document.getElementById('trivia-options');
+                optionsDiv.innerHTML = '';
+                
+                quizData.options.forEach((option, idx) => {
+                    optionsDiv.innerHTML += `
+                        <button onclick="submitQuizAnswer(${idx}, ${quizData.correctIndex}, this)" class="w-full text-left bg-purple-950/40 hover:bg-pi-violet/35 border border-purple-900/60 p-3 rounded-xl text-xs text-slate-200 transition-all font-medium flex items-center justify-between">
+                            <span>${option}</span>
+                            <span class="text-pi-gold/40 text-[9px]">Option ${idx+1}</span>
+                        </button>
+                    `;
+                });
+
+                loading.classList.add('hidden');
+                content.classList.remove('hidden');
+            } catch (err) {
+                modal.classList.add('hidden');
+                showToast("Could not load AI Quiz.", "❌");
+            }
+        }
+
+        function submitQuizAnswer(selectedIndex, correctIndex, buttonEl) {
+            const buttons = document.querySelectorAll('#trivia-options button');
+            buttons.forEach(btn => btn.disabled = true);
+
+            if (selectedIndex === correctIndex) {
+                buttonEl.classList.add('border-emerald-500', 'bg-emerald-500/20', 'text-emerald-300');
+                piBalance += 0.50; 
+                updateBalances();
+                showToast("+0.50 Pi!", "🏆");
+                
+                const history = document.getElementById('wallet-history');
+                const today = new Date().toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' });
+                history.innerHTML = `
+                    <div class="flex justify-between items-center text-xs pb-2 border-b border-purple-950/30">
+                        <div>
+                            <p class="font-bold text-slate-200">Trivia Reward</p>
+                            <p class="text-[9px] text-slate-400">${today}</p>
+                        </div>
+                        <span class="text-emerald-400 font-semibold font-space">+0.50 Pi</span>
+                    </div>
+                ` + history.innerHTML;
+            } else {
+                buttonEl.classList.add('border-rose-500', 'bg-rose-500/20', 'text-rose-300');
+                buttons[correctIndex].classList.add('border-emerald-500', 'bg-emerald-500/10', 'text-emerald-300');
+                showToast("Wrong answer!", "⚠️");
+            }
+
+            setTimeout(() => {
+                closeTriviaModal();
+            }, 3000);
+        }
+
+        function closeTriviaModal() {
+            document.getElementById('trivia-modal').classList.add('hidden');
+        }
+
+        // --- STREAMING_CHUNK: Processing Imagen 4 Generation & Multi-turn Editing... ---
+        // Génération d'images via Imagen 4
+        async function generateImageWithIA() {
+            const promptInput = document.getElementById('art-prompt').value.trim();
+            if (!promptInput) {
+                showToast("Please enter a prompt.", "⚠️");
+                return;
+            }
+
+            originalArtPrompt = promptInput;
+            const btn = document.getElementById('btn-generate-image');
+            btn.innerHTML = `<i class="fa-solid fa-circle-notch animate-spin text-pi-gold"></i> Imagen 4...`;
+            btn.disabled = true;
+
+            const apiKey = ""; 
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/imagen-4.0-generate-001:predict?key=${apiKey}`;
+
+            const payload = {
+                instances: [{ prompt: promptInput }],
+                parameters: {
+                    sampleCount: 1,
+                    aspectRatio: selectedAspectRatio
+                }
+            };
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) throw new Error("Error generating image");
+
+                const result = await response.json();
+                const base64Bytes = result.predictions?.[0]?.bytesBase64Encoded;
+
+                if (base64Bytes) {
+                    currentGeneratedImageBase64 = base64Bytes;
+                    const imgUrl = `data:image/png;base64,${base64Bytes}`;
+                    document.getElementById('generated-art-image').src = imgUrl;
+                    document.getElementById('art-preview-container').classList.remove('hidden');
+                    document.getElementById('generated-art-title').value = "Art Collection #" + Math.floor(Math.random() * 900 + 100);
+                    showToast("Art beautifully crafted by Imagen 4!", "🎨");
+                } else {
+                    throw new Error("No bytes returned.");
+                }
+            } catch (err) {
+                showToast("Art generation failed.", "❌");
+            } finally {
+                btn.innerHTML = `<i class="fa-solid fa-palette pulse-gold-icon"></i> Générer l'œuvre d'art`;
+                btn.disabled = false;
+            }
+        }
+
+        // Modification Multitours de l'image
+        async function editGeneratedArt() {
+            const editPrompt = document.getElementById('edit-art-instruction').value.trim();
+            if (!editPrompt) return;
+
+            if (!currentGeneratedImageBase64) return;
+
+            const btn = document.getElementById('btn-edit-art');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i> ...`;
+            btn.disabled = true;
+
+            const apiKey = ""; 
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-image-preview:generateContent?key=${apiKey}`;
+
+            const payload = {
+                contents: [{
+                    parts: [
+                        { text: "Modify this image based on: " + editPrompt },
+                        { inlineData: { mimeType: "image/png", data: currentGeneratedImageBase64 } }
+                    ]
+                }],
+                generationConfig: {
+                    responseModalities: ["TEXT", "IMAGE"]
+                }
+            };
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) throw new Error("Image editing failed");
+
+                const result = await response.json();
+                const part = result?.candidates?.[0]?.content?.parts?.find(p => p.inlineData);
+
+                if (part && part.inlineData?.data) {
+                    const newBase64 = part.inlineData.data;
+                    currentGeneratedImageBase64 = newBase64;
+
+                    const imgUrl = `data:${part.inlineData.mimeType};base64,${newBase64}`;
+                    document.getElementById('generated-art-image').src = imgUrl;
+                    document.getElementById('edit-art-instruction').value = '';
+                    showToast("Art edited successfully!", "✨");
+                } else {
+                    throw new Error("No image output returned from the editor.");
+                }
+            } catch (err) {
+                showToast("Failed to edit image.", "❌");
+            } finally {
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            }
+        }
+
+        // Critique Louvre IA de l'Image
+        async function critiqueGeneratedArt() {
+            const imgElement = document.getElementById('generated-art-image');
+            if (!imgElement.src || imgElement.src === '') return;
+
+            const btn = document.getElementById('btn-critique');
+            const originalHtml = btn.innerHTML;
+            btn.innerHTML = `<i class="fa-solid fa-circle-notch animate-spin"></i> Critique...`;
+            btn.disabled = true;
+
+            const base64Data = imgElement.src.split(',')[1];
+            const apiKey = ""; 
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+
+            const userQuery = `Analyze this digital masterpiece created with the prompt "${originalArtPrompt}". Give an inspiring, detailed curatorial critique. Evaluate style, colors, composition and lighting. Respond in the user language: ${currentLang}. Max 2 short paragraphs.`;
+
+            const payload = {
+                contents: [
+                    {
+                        role: "user",
+                        parts: [
+                            { text: userQuery },
+                            {
+                                inlineData: {
+                                    mimeType: "image/png",
+                                    data: base64Data
+                                }
+                            }
+                        ]
+                    }
+                ]
+            };
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) throw new Error("Failed to curate");
+
+                const result = await response.json();
+                const analysisText = result.candidates?.[0]?.content?.parts?.[0]?.text;
+
+                if (analysisText) {
+                    openCustomModal("Louvre Curator critique", analysisText, false, null, null, null, null, null);
+                }
+            } catch (err) {
+                showToast("Failed to critique art.", "❌");
+            } finally {
+                btn.innerHTML = originalHtml;
+                btn.disabled = false;
+            }
+        }
+
+        function mintGeneratedArt() {
+            const title = document.getElementById('generated-art-title').value.trim();
+            if (!title) return;
+
+            customArtGallery.arts.push({
+                title: `${title} - Imagen 4`,
+                desc: 'Digital certified artwork.',
+                price: 0.50,
+                isFree: false,
+                content: 'Certified unique painting minted on the Pi Network.'
+            });
+
+            piBalance += 0.50;
+            updateBalances();
+            showToast("NFT Minted!", "💎");
+            switchView('dashboard');
+        }
+
+        // --- STREAMING_CHUNK: Processing Music Chord Sheet Composer... ---
+        // Composer une musique par IA
+        async function composeMusicWithIA() {
+            const promptInput = document.getElementById('music-prompt').value.trim();
+            const genre = document.getElementById('music-genre').value;
+            const key = document.getElementById('music-key').value;
+
+            if (!promptInput) return;
+
+            const btn = document.getElementById('btn-compose-music');
+            const originalHtml = btn.innerHTML;
+            btn.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i> Composing...`;
+            btn.disabled = true;
+
+            const composerPrompt = `Generate a creative song sheet based on the inspiration "${promptInput}". Style: ${genre}, Key: ${key}. Place chords inside brackets [C] [Am] directly above the lyrics. Output in the requested language: ${currentLang}. Use the following exact JSON structure.`;
+
+            const responseSchema = {
+                type: "OBJECT",
+                properties: {
+                    title: { type: "STRING" },
+                    lyricsAndChords: { type: "STRING" },
+                    tempoBpm: { type: "STRING" },
+                    artisticAdvice: { type: "STRING" }
+                },
+                required: ["title", "lyricsAndChords", "tempoBpm", "artisticAdvice"]
+            };
+
+            try {
+                const responseJson = await fetchGemini(composerPrompt, "You are a professional music master composer.", true, responseSchema);
+                const musicData = JSON.parse(responseJson);
+
+                document.getElementById('music-result-title').innerText = musicData.title;
+                document.getElementById('music-result-meta').innerText = `${genre} • ${musicData.tempoBpm} • ${key}`;
+                
+                const formattedSheet = `[TEMPO / BPM]: ${musicData.tempoBpm}\n\n[ADVICE]: ${musicData.artisticAdvice}\n\n---------------------------------------\n\n${musicData.lyricsAndChords}`;
+                document.getElementById('music-result-sheet').innerText = formattedSheet;
+                
+                document.getElementById('music-composition-container').classList.remove('hidden');
+                showToast("Song composed!", "🎸");
+            } catch (err) {
+                showToast("Failed to compose.", "❌");
+            } finally {
+                btn.innerHTML = originalHtml;
+                btn.disabled = false;
+            }
+        }
+
+        // --- STREAMING_CHUNK: Audio Tools, Live Call Simulation, and TTS Helpers... ---
+        // Helpers pour transformer le flux audio
+        function base64ToArrayBuffer(base64) {
+            const binaryString = window.atob(base64);
+            const len = binaryString.length;
+            const bytes = new Uint8Array(len);
+            for (let i = 0; i < len; i++) {
+                bytes[i] = binaryString.charCodeAt(i);
+            }
+            return bytes.buffer;
+        }
+
+        function pcmToWav(pcm16, sampleRate) {
+            const buffer = new ArrayBuffer(44 + pcm16.length * 2);
+            const view = new DataView(buffer);
+
+            const writeString = (v, offset, str) => {
+                for (let i = 0; i < str.length; i++) {
+                    v.setUint8(offset + i, str.charCodeAt(i));
+                }
+            };
+
+            writeString(view, 0, 'RIFF');
+            view.setUint32(4, 36 + pcm16.length * 2, true);
+            writeString(view, 8, 'WAVE');
+            writeString(view, 12, 'fmt ');
+            view.setUint32(16, 16, true);
+            view.setUint16(20, 1, true);
+            view.setUint16(22, 1, true);
+            view.setUint32(24, sampleRate, true);
+            view.setUint32(28, sampleRate * 2, true);
+            view.setUint16(32, 2, true);
+            view.setUint16(34, 16, true);
+            writeString(view, 36, 'data');
+            view.setUint32(40, pcm16.length * 2, true);
+
+            for (let i = 0; i < pcm16.length; i++) {
+                view.setInt16(44 + i * 2, pcm16[i], true);
+            }
+
+            return new Blob([buffer], { type: 'audio/wav' });
+        }
+
+        // Synthèse Vocale TTS via Gemini Audio API
+        async function playTTS(textToSpeak, buttonElement) {
+            if (currentAudio) {
+                currentAudio.pause();
+                currentAudio = null;
+                buttonElement.innerHTML = `<i class="fa-solid fa-volume-high"></i> Narrative TTS`;
+                return;
+            }
+
+            const originalText = buttonElement.innerHTML;
+            buttonElement.innerHTML = `<i class="fa-solid fa-circle-notch animate-spin"></i> Processing...`;
+            buttonElement.disabled = true;
+
+            const apiKey = ""; 
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-tts:generateContent?key=${apiKey}`;
+
+            const payload = {
+                contents: [{
+                    parts: [{ text: "Read the following clearly and poetically: " + textToSpeak }]
+                }],
+                generationConfig: {
+                    responseModalities: ["AUDIO"],
+                    speechConfig: {
+                        voiceConfig: {
+                            prebuiltVoiceConfig: { voiceName: "Sulafat" }
+                        }
+                    }
+                }
+            };
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) throw new Error("TTS error");
+
+                const result = await response.json();
+                const part = result?.candidates?.[0]?.content?.parts?.[0];
+                const audioData = part?.inlineData?.data;
+                const mimeType = part?.inlineData?.mimeType;
+
+                if (audioData && mimeType) {
+                    const sampleRate = parseInt(mimeType.match(/rate=(\d+)/)?.[1] || "24000", 10);
+                    const pcmData = base64ToArrayBuffer(audioData);
+                    const wavBlob = pcmToWav(new Int16Array(pcmData), sampleRate);
+                    const audioUrl = URL.createObjectURL(wavBlob);
+
+                    currentAudio = new Audio(audioUrl);
+                    buttonElement.innerHTML = `<i class="fa-solid fa-square-stop text-rose-400"></i> Stop`;
+                    buttonElement.disabled = false;
+
+                    currentAudio.play();
+                    currentAudio.onended = () => {
+                        buttonElement.innerHTML = originalText;
+                        currentAudio = null;
+                    };
+                }
+            } catch (err) {
+                buttonElement.innerHTML = originalText;
+                buttonElement.disabled = false;
+                showToast("TTS Narrative failed.", "❌");
+            }
+        }
+
+        function narrateSong() {
+            const sheet = document.getElementById('music-result-sheet').innerText;
+            playTTS(sheet, document.getElementById('btn-music-tts'));
+        }
+
+        function publishSongToGallery() {
+            showToast("Published!", "🎉");
+            document.getElementById('music-composition-container').classList.add('hidden');
+        }
+
+        // --- LIVE APPEL AUDIO AVATARS ---
+        async function toggleVoiceCall() {
+            const avatarSelect = document.getElementById('live-avatar');
+            const selectedName = avatarSelect.options[avatarSelect.selectedIndex].text.split(' (')[0];
+            const modal = document.getElementById('live-call-modal');
+            const status = document.getElementById('call-avatar-status');
+            const caption = document.getElementById('call-live-caption');
+
+            if (isVoiceCallActive) {
+                isVoiceCallActive = false;
+                modal.classList.add('hidden');
+                if (currentAudio) {
+                    currentAudio.pause();
+                    currentAudio = null;
+                }
+                showToast("Call ended", "☎️");
+                return;
+            }
+
+            isVoiceCallActive = true;
+            document.getElementById('call-avatar-name').innerText = selectedName;
+            modal.classList.remove('hidden');
+            status.innerText = "Connecting...";
+            caption.innerText = `"Waiting for connection..."`;
+
+            setTimeout(() => {
+                if (!isVoiceCallActive) return;
+                status.innerText = "Connected";
+                caption.innerHTML = `Welcome pioneer! I am ${selectedName}. Let us discuss philosophy, history and the arts together.`;
+                speakAvatarResponse(caption.innerText);
+            }, 2000);
+        }
+
+        async function speakAvatarResponse(text) {
+            if (!isVoiceCallActive) return;
+            const apiKey = ""; 
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-tts:generateContent?key=${apiKey}`;
+
+            const payload = {
+                contents: [{
+                    parts: [{ text: "Speak: " + text }]
+                }],
+                generationConfig: {
+                    responseModalities: ["AUDIO"],
+                    speechConfig: {
+                        voiceConfig: {
+                            prebuiltVoiceConfig: { voiceName: "Sulafat" }
+                        }
+                    }
+                }
+            };
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                if (response.ok) {
+                    const result = await response.json();
+                    const audioData = result?.candidates?.[0]?.content?.parts?.[0]?.inlineData?.data;
+                    const mimeType = result?.candidates?.[0]?.content?.parts?.[0]?.inlineData?.mimeType;
+
+                    if (audioData && mimeType && isVoiceCallActive) {
+                        const sampleRate = parseInt(mimeType.match(/rate=(\d+)/)?.[1] || "24000", 10);
+                        const wavBlob = pcmToWav(new Int16Array(base64ToArrayBuffer(audioData)), sampleRate);
+                        if (currentAudio) currentAudio.pause();
+                        currentAudio = new Audio(URL.createObjectURL(wavBlob));
+                        currentAudio.play();
+                    }
+                }
+            } catch (err) {
+                console.log("TTS voice exchange failed.");
+            }
+        }
+
+        function toggleMic() {
+            isMicMuted = !isMicMuted;
+            const btn = document.getElementById('btn-toggle-mic');
+            btn.innerHTML = isMicMuted ? `<i class="fa-solid fa-microphone-slash text-rose-500"></i>` : `<i class="fa-solid fa-microphone"></i>`;
+        }
+
+        // --- TRANSMUTATEUR LITTÉRAIRE ---
+        async function transmuteArtPiece(originalContent, styleFormat, buttonEl) {
+            const originalText = buttonEl.innerHTML;
+            buttonEl.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i>...`;
+            buttonEl.disabled = true;
+
+            const styleInstructions = {
+                haiku: "Condense this text into a traditional Japanese Haiku (5-7-5) in French.",
+                medieval: "Rewrite this in archaic Middle Ages medieval French.",
+                cyberpunk: "Metamorphose this into a high-tech cyberpunk terminal data logs.",
+                shakespeare: "Translate and adapt this text into majestic Shakespearean English."
+            };
+
+            try {
+                const transmuted = await fetchGemini(styleInstructions[styleFormat] + "\n\nText:\n" + originalContent, "You are the Transmutation Master. Answer directly with no comments.");
+                const contentBox = buttonEl.closest('.bg-white\\/5').querySelector('.select-text');
+                contentBox.innerHTML = `<div class="border-l-2 border-pi-gold pl-2 italic text-slate-400 text-[10px] mb-2">Transmutation IA (${styleFormat.toUpperCase()}) :</div>${transmuted}`;
+                showToast("Transmutation accomplished!", "✨");
+            } catch (err) {
+                showToast("Failed to transmutate.", "❌");
+            } finally {
+                buttonEl.innerHTML = originalText;
+                buttonEl.disabled = false;
+            }
+        }
+
+        // --- TIROIRS (EXPLORATEUR DE CATÉGORIES) ---
+        function openDrawer(category) {
+            const drawerContainer = document.getElementById('drawer-container');
+            const drawerTitle = document.getElementById('drawer-title');
+            const drawerContent = document.getElementById('drawer-content');
+            
+            drawerContainer.classList.remove('hidden');
+            drawerTitle.innerText = category.toUpperCase();
+
+            const items = customArtGallery[category] || [];
+            let html = `<div class="space-y-4">`;
+            items.forEach((item, index) => {
+                const escapedContent = item.content.replace(/'/g, "\\'").replace(/"/g, '\\"').replace(/\n/g, ' ');
+                html += `
+                    <div class="p-3 bg-white/5 rounded-xl border border-pi-violet/20 space-y-2">
+                        <h4 class="font-bold text-pi-gold font-space">${item.title}</h4>
+                        <p class="text-[11px] text-slate-300">${item.desc}</p>
+                        
+                        <div class="p-2.5 bg-purple-950/40 rounded-lg text-[11px] text-slate-200 select-text leading-relaxed select-text font-sans">
+                            ${item.content}
+                        </div>
+
+                        <!-- Transmutate Tools -->
+                        <div class="p-2 bg-purple-950/20 border border-purple-900/30 rounded-lg flex flex-col gap-1.5 mt-1">
+                            <span class="text-[8px] text-slate-400 uppercase font-black">Transmuter (IA)</span>
+                            <div class="flex gap-1.5 flex-wrap">
+                                <button onclick="transmuteArtPiece('${escapedContent}', 'haiku', this)" class="bg-[#1a0f2e] hover:bg-pi-violet/20 border border-pi-violet/40 px-2 py-0.5 rounded text-[9px] text-pi-gold">🌸 Haïku</button>
+                                <button onclick="transmuteArtPiece('${escapedContent}', 'medieval', this)" class="bg-[#1a0f2e] hover:bg-pi-violet/20 border border-pi-violet/40 px-2 py-0.5 rounded text-[9px] text-pi-gold">🏰 Médiéval</button>
+                                <button onclick="transmuteArtPiece('${escapedContent}', 'cyberpunk', this)" class="bg-[#1a0f2e] hover:bg-pi-violet/20 border border-pi-violet/40 px-2 py-0.5 rounded text-[9px] text-pi-gold">💻 Cyber</button>
+                                <button onclick="transmuteArtPiece('${escapedContent}', 'shakespeare', this)" class="bg-[#1a0f2e] hover:bg-pi-violet/20 border border-pi-violet/40 px-2 py-0.5 rounded text-[9px] text-pi-gold">🎭 Shakespeare</button>
+                            </div>
+                        </div>
+
+                        <div class="mt-2 flex justify-between items-center gap-2">
+                            <span class="text-pi-gold font-bold text-xs">${item.isFree ? 'Free' : item.price.toFixed(2) + ' Pi'}</span>
+                            <div class="flex gap-2">
+                                <button onclick="playTTS('${escapedContent}', this)" class="bg-purple-950 border border-pi-gold/30 px-3 py-1 rounded-lg text-pi-gold font-bold text-[10px] flex items-center gap-1 transition-all">
+                                    <i class="fa-solid fa-volume-high"></i> Narrative
+                                </button>
+                                ${item.isFree ? `
+                                    <button onclick="closeDrawer();" class="bg-pi-violet px-3 py-1 rounded-lg text-white font-bold text-[10px]">Open</button>
+                                ` : `
+                                    <button onclick="buyArt('${item.title.replace(/'/g, "\\'")}', ${item.price})" class="bg-pi-violet px-3 py-1 rounded-lg text-white font-bold text-[10px]">Buy</button>
+                                `}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            html += `</div>`;
+            drawerContent.innerHTML = html;
+        }
+
+        function openDrawerContent(category, subCategoryName) {
+            openDrawer(category);
+            document.getElementById('drawer-title').innerText = `${subCategoryName}`;
+        }
+
+        function closeDrawer() {
+            document.getElementById('drawer-container').classList.add('hidden');
+            if (currentAudio) {
+                currentAudio.pause();
+                currentAudio = null;
+            }
+        }
+
+        // --- PI WALLET LOGIQUE ---
+        function updateBalances() {
+            document.getElementById('header-balance').innerText = `${piBalance.toFixed(2)} Pi`;
+            document.getElementById('wallet-pi-balance').innerHTML = `${piBalance.toFixed(5)} <span class="text-pi-gold">Pi</span>`;
+        }
+
+        function buyArt(itemName, price) {
+            if (piBalance < price) return;
+            piBalance -= price;
+            updateBalances();
+            closeDrawer();
+            showToast("Success purchase", "💰");
+        }
+
+        function openTipDialog() {
+            openCustomModal("Donner un pourboire", "Pioneer username & amount:", true, "@username", "Pi Amount", "@Voltaire", "1.0", (user, amt) => {
+                const amount = parseFloat(amt);
+                if (piBalance >= amount) {
+                    piBalance -= amount;
+                    updateBalances();
+                    showToast("Tip sent!", "💖");
+                }
+            });
+        }
+
+        function simulateMining() {
+            if (isMiningActive) return;
+            isMiningActive = true;
+            document.getElementById('mine-btn').innerHTML = `<i class="fa-solid fa-bolt animate-pulse"></i> Mining...`;
+            piBalance += 0.314;
+            updateBalances();
+            showToast("Mining Active! +0.314 Pi", "⚡");
+        }
+
+        function handleNewCreation(e) {
+            e.preventDefault();
+            const category = document.getElementById('create-category').value;
+            const title = document.getElementById('create-title').value;
+            const body = document.getElementById('create-body').value;
+
+            customArtGallery[category].push({
+                title: title,
+                desc: 'Pioneer publication.',
+                price: 0.0,
+                isFree: true,
+                content: body
+            });
+
+            document.getElementById('create-title').value = '';
+            document.getElementById('create-body').value = '';
+            showToast("Successfully published!", "🎉");
+            switchView('dashboard');
+        }
+
+        function toggleNotifications() {
+            const panel = document.getElementById('notif-panel');
+            panel.classList.toggle('hidden');
+        }
+
+        function clearNotifications() {
+            document.getElementById('notif-badge').classList.add('hidden');
+            document.getElementById('notif-panel').classList.add('hidden');
+        }
+
+    </script>
+        
+    <!-- LOGIQUE ET MODULES DU PROTOCOLE PI -->
+    <script>
+        // CONFIGURATION DU MODE RÉSEAU (SANDBOX / MAINNET)
+        // Laissez 'true' pour vos phases de tests sur ://pinet.com.
+        // Il suffira de basculer sur 'false' lors du lancement final sur le Mainnet réel.
+        const isSandboxMode = true; 
+
+        // VÉRIFICATION DE LA PRÉSENCE DU SDK DANS LE NAVIGATEUR
+        if (typeof Pi !== 'undefined') {
+            
+            // 1. COMPOSANTE INITIALISATION (INIT)
+            Pi.init({ version: "2.0", sandbox: isSandboxMode });
+            console.log("Pi SDK initialisé avec succès.");
+            
+            // Mise à jour de votre affichage d'état si l'élément existe dans vos pages
+            const statusBox = document.getElementById('status');
+            if (statusBox) statusBox.innerText = "Protocole activé. Authentification...";
+
+            // 2. COMPOSANTE AUTHENTIFICATION (CONNEXION AUTOMATIQUE)
+            // Demande d'accès au nom d'utilisateur et aux fenêtres de paiements
+            const scopes = ['username', 'payments'];
+            
+            Pi.authenticate(scopes, onIncompletePaymentFound)
+                .then(function(auth) {
+                    console.log("Pionnier authentifié :", auth.user.username);
+                    if (statusBox) statusBox.innerText = "Bienvenue, " + auth.user.username + " !";
+                })
+                .catch(function(err) {
+                    console.error("Échec de la connexion automatique :", err);
+                    if (statusBox) statusBox.innerText = "Erreur d'authentification Pi Network.";
+                });
+                
+        } else {
+            console.error("Le SDK Pi est introuvable. Ouvrez l'application dans le Pi Browser.");
+        }
+
+        // 3. COMPOSANTE SÉCURITÉ OBLIGATOIRE : PAIEMENTS INCOMPLETS
+        // Cette fonction intercepte et résout automatiquement les transactions suspendues
+        function onIncompletePaymentFound(payment) {
+            console.log("Avertissement protocole : Un paiement suspendu a été détecté :", payment);
+            // Le SDK Pi gère la vérification en tâche de fond avec les serveurs Pi Core
+        }
+    </script>
+</body>
+
+</html>
