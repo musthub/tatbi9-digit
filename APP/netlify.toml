@@ -3,8 +3,8 @@
 # ==========================================
 
 [build]
-  publish = "."               # Dossier racine du projet
-  functions = "netlify/functions" # Dossier pour les fonctions serverless
+  publish = "APP"               # Dossier racine du projet
+  functions = "APP/Netlify/functions" # Dossier pour les fonctions serverless
 
 # Redirection globale pour application Single Page / Pi Browser
 [[redirects]]
