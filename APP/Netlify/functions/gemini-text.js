@@ -1,4 +1,6 @@
-// netlify/functions/gemini-text.js
+// ==========================================
+// FONCTION NETLIFY : gemini-text.js
+// ==========================================
 exports.handler = async function (event, context) {
   // Gestion du protocole CORS (Pré-vérification des navigateurs)
   if (event.httpMethod === "OPTIONS") {
@@ -17,21 +19,21 @@ exports.handler = async function (event, context) {
     return { statusCode: 405, body: "Méthode non autorisée" };
   }
 
-  // RECONNAISSANCE DE LA CLÉ STANDARD GOOGLE
-  const apiKey = process.env.GOOGLE_API_KEY || process.env.GEMINI_API_KEY;
+  // RECONNAISSANCE DE LA CLÉ STANDARD GEMINI
+  const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) {
     return { 
       statusCode: 500, 
       headers: { "Access-Control-Allow-Origin": "*" },
-      body: JSON.stringify({ error: "Configuration incomplète : Clé GOOGLE_API_KEY introuvable sur Netlify." }) 
+      body: JSON.stringify({ error: "Configuration incomplète : Clé GEMINI_API_KEY introuvable sur Netlify." }) 
     };
   }
 
   try {
     const { prompt, systemInstruction } = JSON.parse(event.body);
     
-    // URL REST officielle et corrigée pour le modèle moderne gemini-2.5-flash
-    const url = `https://googleapis.com{apiKey}`;
+    // URL REST officielle et corrigée pour les modèles Gemini
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
 
     const response = await fetch(url, {
       method: "POST",
