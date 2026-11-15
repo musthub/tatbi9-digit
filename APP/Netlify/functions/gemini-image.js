@@ -26,11 +26,25 @@ exports.handler = async function (event, context) {
 
   try {
     const payload = JSON.parse(event.body || "{}");
-    const prompt = payload.prompt || "";
-    const systemInstruction = payload.systemInstruction || "Tu es l'IA officielle de l'Espace Culturel des Pionniers DiGiT.";
+    const prompt = payload.prompt || "Décris cette image.";
+    const imageBase64 = payload.image; // Optionnel : si tu envoies une image en base64
+    const mimeType = payload.mimeType || "image/jpeg";
 
-    const model = "gemini-2.5-flash";
-    const url = https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey};
+    // On utilise le modèle gemini-1.5-flash ultra-stable
+    const model = "gemini-1.5-flash";
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
+
+    // Construction des parties du contenu (texte + image optionnelle)
+    const parts = [{ text: prompt }];
+
+    if (imageBase64) {
+      parts.push({
+        inline_data: {
+          mime_type: mimeType,
+          data: imageBase64
+        }
+      });
+    }
 
     const response = await fetch(url, {
       method: "POST",
@@ -38,15 +52,11 @@ exports.handler = async function (event, context) {
       body: JSON.stringify({
         contents: [
           {
-            role: "user",
-            parts: [{ text: prompt }]
+            parts: parts
           }
         ],
-        systemInstruction: {
-          parts: [{ text: systemInstruction }]
-        },
         generationConfig: {
-          temperature: 0.7
+          temperature: 0.4
         }
       })
     });
@@ -54,13 +64,13 @@ exports.handler = async function (event, context) {
     const data = await response.json();
 
     if (!response.ok) {
-      throw new Error(data?.error?.message || "Erreur Gemini côté serveur.");
+      throw new Error(data?.error?.message || "Erreur Gemini Image côté serveur.");
     }
 
     const texteGenere = data?.candidates?.[0]?.content?.parts?.[0]?.text;
 
     if (!texteGenere) {
-      throw new Error("Réponse Gemini vide ou mal structurée.");
+      throw new Error("Réponse Gemini Image vide ou mal structurée.");
     }
 
     return {
@@ -73,7 +83,7 @@ exports.handler = async function (event, context) {
     };
 
   } catch (error) {
-    console.error("Erreur gemini-text :", error);
+    console.error("Erreur gemini-image :", error);
     return {
       statusCode: 500,
       headers: { "Access-Control-Allow-Origin": "*" },
