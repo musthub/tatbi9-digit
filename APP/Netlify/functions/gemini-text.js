@@ -29,8 +29,12 @@ exports.handler = async function (event, context) {
     const prompt = payload.prompt || "";
     const systemInstruction = payload.systemInstruction || "Tu es l'IA officielle de l'Espace Culturel des Pionniers DiGiT.";
 
-const model = "gemini-1.5-flash";
+    const model = "gemini-1.5-flash";
     const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
+
+    // On combine l'instruction système et le prompt proprement pour éviter tout rejet de l'API
+    const fullPrompt = `${systemInstruction}\n\nUtilisateur: ${prompt}`;
+
     const response = await fetch(url, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -38,12 +42,9 @@ const model = "gemini-1.5-flash";
         contents: [
           {
             role: "user",
-            parts: [{ text: prompt }]
+            parts: [{ text: fullPrompt }]
           }
         ],
-        systemInstruction: {
-          parts: [{ text: systemInstruction }]
-        },
         generationConfig: {
           temperature: 0.7
         }
