@@ -1515,7 +1515,78 @@ async function fetchGemini(userPrompt, systemInstruction = "", formatJson = fals
     if (!response.ok || data.error) {
         throw new Error(data.error || "Erreur de génération texte.");
     }
+// --- APPELS GLOBAUX GEMINI AVEC BACKEND NETLIFY ---
+async function fetchGemini(
+  userPrompt,
+  systemInstruction = "",
+  formatJson = false,
+  responseSchema = null,
+  timeoutMs = 15000 // Timeout in milliseconds
+) {
+  // Input validation
+  if (typeof userPrompt !== "string" || !userPrompt.trim()) {
+    throw new Error("Le prompt utilisateur doit être une chaîne non vide.");
+  }
+  if (typeof systemInstruction !== "string") {
+    throw new Error("L'instruction système doit être une chaîne.");
+  }
 
+  // Timeout controller
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), timeoutMs);
+
+  try {
+    const response = await fetch("/.netlify/functions/gemini-text", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        prompt: userPrompt,
+        systemInstruction: systemInstruction
+      }),
+      signal: controller.signal
+    });
+
+    clearTimeout(timeout);
+
+    const data = await response.json().catch(() => {
+      throw new Error("Réponse JSON invalide du serveur.");
+    });
+
+    // HTTP or API error handling
+    if (!response.ok || data.error) {
+      throw new Error(data.error || Erreur HTTP ${response.status});
+    }
+
+    // Optional JSON parsing
+    let result = data.text;
+    if (formatJson) {
+      try {
+        result = JSON.parse(data.text);
+      } catch (err) {
+        throw new Error("Le texte retourné n'est pas un JSON valide.");
+      }
+
+      // Optional schema validation
+      if (responseSchema && typeof responseSchema === "object") {
+        const missingKeys = Object.keys(responseSchema).filter(
+          key => !(key in result)
+        );
+        if (missingKeys.length) {
+          throw new Error(
+            Le JSON ne respecte pas le schéma attendu. Clés manquantes: ${missingKeys.join(", ")}
+          );
+        }
+      }
+    }
+
+    return result;
+  } catch (err) {
+    if (err.name === "AbortError") {
+      throw new Error("La requête a expiré (timeout).");
+    }
+    throw err;
+  }
+}
     if (formatJson) {
         try {
             return JSON.parse(data.text);
