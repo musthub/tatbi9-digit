@@ -1499,52 +1499,33 @@
             }
         }
 
-        // --- APPELS GLOBAUX GEMINI AVEC BACKOFF ROBUSTE ---
-        async function fetchGemini(userPrompt, systemInstruction = "", formatJson = false, responseSchema = null) {
-            const apiKey = ""; // Clé injectée automatiquement
-            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
-            
-            const payload = {
-                contents: [{ parts: [{ text: userPrompt }] }]
-            };
+       // --- APPELS GLOBAUX GEMINI AVEC BACKEND NETLIFY ---
+async function fetchGemini(userPrompt, systemInstruction = "", formatJson = false, responseSchema = null) {
+    const response = await fetch('/.netlify/functions/gemini-text', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            prompt: userPrompt,
+            systemInstruction: systemInstruction
+        })
+    });
 
-            if (systemInstruction) {
-                payload.systemInstruction = {
-                    parts: [{ text: systemInstruction }]
-                };
-            }
+    const data = await response.json();
 
-            if (formatJson) {
-                payload.generationConfig = {
-                    responseMimeType: "application/json"
-                };
-                if (responseSchema) {
-                    payload.generationConfig.responseSchema = responseSchema;
-                }
-            }
+    if (!response.ok || data.error) {
+        throw new Error(data.error || "Erreur de génération texte.");
+    }
 
-            const delays = [1000, 2000, 4000, 8000, 16000];
-            for (let i = 0; i < 5; i++) {
-                try {
-                    const response = await fetch(apiUrl, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(payload)
-                    });
-                    if (response.ok) {
-                        const data = await response.json();
-                        return data.candidates?.[0]?.content?.parts?.[0]?.text || "";
-                    }
-                } catch (e) {
-                    // Fail silencieusement et continue
-                }
-                if (i < 4) {
-                    await new Promise(resolve => setTimeout(resolve, delays[i]));
-                }
-            }
-            throw new Error("Toutes les tentatives de connexion réseau ont échoué.");
+    if (formatJson) {
+        try {
+            return JSON.parse(data.text);
+        } catch (err) {
+            return data.text;
         }
+    }
 
+    return data.text;
+}
         // --- STREAMING_CHUNK: Processing Chat Rooms & Bot Interactions... ---
         // Gestion de la messagerie instantanée
         function switchChatRoom(roomName) {
