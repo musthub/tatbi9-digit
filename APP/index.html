@@ -1500,22 +1500,6 @@
         }
 
        // --- APPELS GLOBAUX GEMINI AVEC BACKEND NETLIFY ---
-async function fetchGemini(userPrompt, systemInstruction = "", formatJson = false, responseSchema = null) {
-    const response = await fetch('/.netlify/functions/gemini-text', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-            prompt: userPrompt,
-            systemInstruction: systemInstruction
-        })
-    });
-
-    const data = await response.json();
-
-    if (!response.ok || data.error) {
-        throw new Error(data.error || "Erreur de génération texte.");
-    }
-// --- APPELS GLOBAUX GEMINI AVEC BACKEND NETLIFY ---
 async function fetchGemini(
   userPrompt,
   systemInstruction = "",
@@ -1554,7 +1538,7 @@ async function fetchGemini(
 
     // HTTP or API error handling
     if (!response.ok || data.error) {
-      throw new Error(data.error || Erreur HTTP ${response.status});
+      throw new Error(data.error || `Erreur HTTP ${response.status}`);
     }
 
     // Optional JSON parsing
@@ -1573,7 +1557,7 @@ async function fetchGemini(
         );
         if (missingKeys.length) {
           throw new Error(
-            Le JSON ne respecte pas le schéma attendu. Clés manquantes: ${missingKeys.join(", ")}
+            `Le JSON ne respecte pas le schéma attendu. Clés manquantes: ${missingKeys.join(", ")}`
           );
         }
       }
@@ -1586,16 +1570,6 @@ async function fetchGemini(
     }
     throw err;
   }
-}
-    if (formatJson) {
-        try {
-            return JSON.parse(data.text);
-        } catch (err) {
-            return data.text;
-        }
-    }
-
-    return data.text;
 }
         // --- STREAMING_CHUNK: Processing Chat Rooms & Bot Interactions... ---
         // Gestion de la messagerie instantanée
